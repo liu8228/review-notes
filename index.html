@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="刘苇面试准备手册：技术经理 / AI Agent 开发 / Java 高级开发">
+<title>面试准备手册 · 刘苇</title>
+<style>
+:root{
+  --primary:#0A1628; --accent:#1B6B7A; --accent-bright:#37DCF2;
+  --text:#1c222b; --muted:#68727e; --line:#e3e8ee; --bg:#f6f8fa; --card:#ffffff;
+  --tip-bg:#eef4f5; --head-bg:#ffffffee; --q-bg:#f4f9fa;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --primary:#dbe4ee; --accent:#4fb3c4; --accent-bright:#37DCF2;
+    --text:#c9d2dc; --muted:#8b95a1; --line:#2a3442; --bg:#11161d; --card:#1a212b;
+    --tip-bg:#1c2a2e; --head-bg:#11161dee; --q-bg:#182328; }
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+h1,h2,h3,section.part{scroll-margin-top:70px;}
+body{margin:0; background:var(--bg); color:var(--text);
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+  font-size:var(--fs,16px); overflow-x:hidden;}
+/* ── 顶部栏 ── */
+#topbar{position:fixed; top:0; left:0; right:0; z-index:50; background:var(--head-bg);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--line);}
+#topbar .bar{display:flex; align-items:center; gap:10px; padding:10px 14px;}
+#topbar .title{flex:1; font-weight:700; font-size:15px; color:var(--primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.iconbtn{border:1px solid var(--line); background:var(--card); color:var(--text); border-radius:8px;
+  min-width:38px; height:34px; padding:0 10px; font-size:14px; font-weight:600; cursor:pointer;}
+#progress{height:3px; background:transparent;}
+#progress i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--accent),var(--accent-bright));}
+/* ── 目录抽屉 ── */
+#mask{position:fixed; inset:0; background:#0008; z-index:60; opacity:0; pointer-events:none; transition:.25s;}
+#drawer{position:fixed; top:0; bottom:0; left:0; width:min(82vw,340px); background:var(--card); z-index:61;
+  transform:translateX(-102%); transition:.28s; overflow-y:auto; padding:14px 10px 40px; border-right:1px solid var(--line);}
+body.nav-open #mask{opacity:1; pointer-events:auto;}
+body.nav-open #drawer{transform:none;}
+#drawer h4{margin:14px 10px 6px; font-size:12px; color:var(--muted); letter-spacing:2px;}
+.nav-item{display:block; padding:7px 12px; border-radius:8px; color:var(--text); text-decoration:none; font-size:14px; line-height:1.5;}
+.nav-item.lv1{font-weight:700; color:var(--primary); margin-top:4px; background:var(--tip-bg);}
+.nav-item.lv2{padding-left:22px; font-size:13.5px; color:var(--muted);}
+.nav-item:active{background:var(--tip-bg);}
+/* ── 正文 ── */
+main{max-width:760px; margin:0 auto; padding:66px 18px 90px;}
+.hero{background:linear-gradient(135deg,#0A1628,#16303f 60%,#1B6B7A); color:#fff; border-radius:16px;
+  padding:26px 20px; margin:6px 0 26px;}
+.hero h1{margin:0 0 6px; font-size:22px; letter-spacing:1px; color:#fff;}
+.hero p{margin:0; font-size:13px; color:#b8c6d4; line-height:1.8;}
+.hero .tag{display:inline-block; margin-top:10px; padding:3px 10px; border:1px solid #37DCF2; color:#37DCF2;
+  border-radius:999px; font-size:12px;}
+.part{margin:44px 0 0; padding:14px 0 0; border-top:2px solid var(--line);}
+h1{font-size:21px; color:var(--primary); margin:0 0 14px; line-height:1.5;}
+h2{font-size:18px; color:var(--primary); margin:30px 0 10px; padding-left:10px; border-left:4px solid var(--accent); line-height:1.5;}
+h3{font-size:15.5px; color:var(--primary); margin:20px 0 6px;}
+p.body{margin:10px 0; text-align:justify;}
+ul.points{margin:10px 0; padding-left:4px; list-style:none;}
+ul.points li{position:relative; padding-left:18px; margin:9px 0; text-align:justify;}
+ul.points li::before{content:""; position:absolute; left:2px; top:.72em; width:7px; height:7px;
+  border-radius:2px; background:var(--accent);}
+/* 问答 */
+.qa{margin:16px 0;}
+.q{background:var(--q-bg); border-left:4px solid var(--accent); border-radius:0 10px 10px 0;
+  padding:10px 12px; font-weight:700; color:var(--primary); font-size:15px; line-height:1.7;}
+.qa p.body, .qa ul.points{padding-left:6px;}
+/* 提示框 */
+.tip{background:var(--tip-bg); border-left:4px solid var(--accent-bright); border-radius:0 10px 10px 0;
+  padding:10px 12px; margin:12px 0; font-size:14px; color:var(--text); line-height:1.75;}
+/* 表格 */
+.tablewrap{overflow-x:auto; margin:12px 0; border:1px solid var(--line); border-radius:10px; background:var(--card);}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:520px;}
+th{background:var(--accent); color:#fff; text-align:left; padding:8px 10px; font-weight:600; white-space:nowrap;}
+td{padding:8px 10px; border-top:1px solid var(--line); vertical-align:top; line-height:1.65;}
+/* 手机上表格变成卡片 */
+@media (max-width:640px){
+  .tablewrap{overflow:visible; background:none; border:none;}
+  table{min-width:0;}
+  thead{display:none;}
+  tr{display:block; background:var(--card); border:1px solid var(--line); border-radius:10px; margin:10px 0; padding:4px 2px;}
+  td{display:flex; border-top:none; padding:6px 10px;}
+  td::before{content:attr(data-label); flex:0 0 30%; font-weight:700; color:var(--accent); font-size:12.5px; padding-top:1px;}
+}
+footer{max-width:760px; margin:0 auto; padding:20px 18px 60px; color:var(--muted); font-size:12px; text-align:center;}
+#totop{position:fixed; right:16px; bottom:22px; z-index:55; width:42px; height:42px; border-radius:50%;
+  border:none; background:var(--accent); color:#fff; font-size:18px; cursor:pointer; box-shadow:0 4px 14px #0003;
+  opacity:0; pointer-events:none; transition:.25s;}
+#totop.show{opacity:1; pointer-events:auto;}
+</style>
+</head>
+<body>
+<div id="topbar">
+  <div class="bar">
+    <button class="iconbtn" id="menuBtn" aria-label="目录">☰ 目录</button>
+    <div class="title">面试准备手册 · 刘苇</div>
+    <button class="iconbtn" id="fsMinus" aria-label="缩小字号">A-</button>
+    <button class="iconbtn" id="fsPlus" aria-label="放大字号">A+</button>
+  </div>
+  <div id="progress"><i></i></div>
+</div>
+
+<div id="mask"></div>
+<nav id="drawer">
+  <h4>目 录</h4>
+  <a class="nav-item lv1" href="#top">回到顶部</a>
+  <a class="nav-item lv1" href="#part-1">第一部分　面试总策略：先把自己的定位想清楚</a>
+<a class="nav-item lv2" href="#sec-1-1">1.1 你的三句话定位（必须张口就来）</a>
+<a class="nav-item lv2" href="#sec-1-2">1.2 面试的六条基本打法</a>
+<a class="nav-item lv2" href="#sec-1-3">1.3 必背数字清单（面试前一晚再过一遍）</a>
+<a class="nav-item lv2" href="#sec-1-4">1.4 三个岗位方向，分别主打什么牌</a>
+<a class="nav-item lv1" href="#part-2">第二部分　开场与通用问题</a>
+<a class="nav-item lv2" href="#sec-2-1">2.1 自我介绍（三个版本都要练熟）</a>
+<a class="nav-item lv2" href="#sec-2-2">2.2 通用高频问题（每个都要准备 30 秒版本）</a>
+<a class="nav-item lv1" href="#part-3">第三部分　AI Agent 方向：项目深挖与高频追问</a>
+<a class="nav-item lv2" href="#sec-3-1">3.1 项目怎么讲（三个长度版本）</a>
+<a class="nav-item lv2" href="#sec-3-2">3.2 背景与价值：为什么做这个项目（必考）</a>
+<a class="nav-item lv2" href="#sec-3-3">3.3 三条设计原则：面试的「魂」</a>
+<a class="nav-item lv2" href="#sec-3-4">3.4 四张 LangGraph 图：AI 层的全貌</a>
+<a class="nav-item lv2" href="#sec-3-5">3.5 核心问题一：为什么不让大模型直接写 SQL？（必考第一名）</a>
+<a class="nav-item lv2" href="#sec-3-6">3.6 核心问题二：三层规格与失败自修</a>
+<a class="nav-item lv2" href="#sec-3-7">3.7 核心问题三：六道护栏与三层防御（最扎实的一块）</a>
+<a class="nav-item lv2" href="#sec-3-8">3.8 核心问题四：双层记忆</a>
+<a class="nav-item lv2" href="#sec-3-9">3.9 核心问题五：AI 造屏与「固化」</a>
+<a class="nav-item lv2" href="#sec-3-10">3.10 核心问题六：异常洞察与预算控制</a>
+<a class="nav-item lv2" href="#sec-3-11">3.11 核心问题七：提示词工程与模型治理</a>
+<a class="nav-item lv2" href="#sec-3-12">3.12 核心问题八：可观测性与流式体验</a>
+<a class="nav-item lv2" href="#sec-3-13">3.13 RAG 与向量检索：没做过也要讲明白</a>
+<a class="nav-item lv2" href="#sec-3-14">3.14 MCP：AI 工具的通用插头</a>
+<a class="nav-item lv2" href="#sec-3-15">3.15 大模型基础常识（快速过一遍，别在常识题上翻车）</a>
+<a class="nav-item lv2" href="#sec-3-16">3.16 AI 成本控制（技术管理者必问）</a>
+<a class="nav-item lv2" href="#sec-3-17">3.17 AI Agent 高频追问 20 题（快答）</a>
+<a class="nav-item lv2" href="#sec-3-18">3.18 智能体工作原理：脱离项目也能系统讲清</a>
+<a class="nav-item lv2" href="#sec-3-19">3.19 技术选型与效果映射：什么技术达到什么效果</a>
+<a class="nav-item lv2" href="#sec-3-20">3.20 垂直领域智能体：怎么做到「能落地」而不是演示</a>
+<a class="nav-item lv2" href="#sec-3-21">3.21 多 Agent 协作、上下文工程与评测</a>
+<a class="nav-item lv1" href="#part-4">第四部分　Java 方向：基础与中间件</a>
+<a class="nav-item lv2" href="#sec-4-1">4.1 Java 集合（必问）</a>
+<a class="nav-item lv2" href="#sec-4-2">4.2 并发编程（必问）</a>
+<a class="nav-item lv2" href="#sec-4-3">4.3 JVM（常问，答出条理即可）</a>
+<a class="nav-item lv2" href="#sec-4-4">4.4 Spring 与 Spring Boot（必问）</a>
+<a class="nav-item lv2" href="#sec-4-5">4.5 MyBatis</a>
+<a class="nav-item lv2" href="#sec-4-6">4.6 MySQL（重中之重）</a>
+<a class="nav-item lv2" href="#sec-4-7">4.7 Redis（简历没写，但要会用话术接）</a>
+<a class="nav-item lv2" href="#sec-4-8">4.8 Kafka（简历核心中间件，必须答得漂亮）</a>
+<a class="nav-item lv2" href="#sec-4-9">4.9 ElasticSearch（简历里有，至少要讲清原理）</a>
+<a class="nav-item lv2" href="#sec-4-10">4.10 Dubbo / 微服务治理</a>
+<a class="nav-item lv2" href="#sec-4-11">4.11 Doris（你项目的主打选型，往深里准备）</a>
+<a class="nav-item lv2" href="#sec-4-12">4.12 分布式通用题</a>
+<a class="nav-item lv2" href="#sec-4-13">4.13 高并发架构设计（高级岗必考）</a>
+<a class="nav-item lv2" href="#sec-4-14">4.14 高级分布式技术（高级岗必考）</a>
+<a class="nav-item lv2" href="#sec-4-15">4.15 高并发演练题：秒杀系统（背熟一套完整答案）</a>
+<a class="nav-item lv2" href="#sec-4-16">4.16 稳定性与性能优化方法论（体现高级感的收口）</a>
+<a class="nav-item lv2" href="#sec-4-17">4.17 系统设计题套路与演练</a>
+<a class="nav-item lv2" href="#sec-4-18">4.18 Java 快答清单（15 题，每题 30 秒内）</a>
+<a class="nav-item lv1" href="#part-5">第五部分　数据工程与口径治理（差异化亮点）</a>
+<a class="nav-item lv2" href="#sec-5-1">5.1 窄表设计：为什么指标表是一行一个值</a>
+<a class="nav-item lv2" href="#sec-5-2">5.2 均值不能存均值：一个值得讲一分钟的数学坑</a>
+<a class="nav-item lv2" href="#sec-5-3">5.3 幂等采集：重跑不炸账</a>
+<a class="nav-item lv2" href="#sec-5-4">5.4 维度分两张表：属性与关系</a>
+<a class="nav-item lv2" href="#sec-5-5">5.5 只暴露视图：一石四鸟</a>
+<a class="nav-item lv2" href="#sec-5-6">5.6 数据可信的五道保障（收口用）</a>
+<a class="nav-item lv1" href="#part-6">第六部分　技术经理方向：管理与协作</a>
+<a class="nav-item lv2" href="#sec-6-1">6.1 带 7 人团队的完整讲法</a>
+<a class="nav-item lv2" href="#sec-6-2">6.2 高频管理问题快答</a>
+<a class="nav-item lv2" href="#sec-6-3">6.3 你的管理短板怎么答（诚实但无害）</a>
+<a class="nav-item lv2" href="#sec-6-4">6.4 大公司的管理方法：对照着讲，说出落地版</a>
+<a class="nav-item lv2" href="#sec-6-5">6.5 管理动作的详细步骤：从接需求到复盘的完整 SOP</a>
+<a class="nav-item lv2" href="#sec-6-6">6.6 管理行为面试（BQ）故事库：一个故事打多道题</a>
+<a class="nav-item lv1" href="#part-7">第七部分　Java 项目经历问答</a>
+<a class="nav-item lv2" href="#sec-7-1">7.1 SkyForm 产品族怎么讲</a>
+<a class="nav-item lv2" href="#sec-7-2">7.2 行业云项目（Dubbox + Kafka + ES 的组合拳）</a>
+<a class="nav-item lv2" href="#sec-7-3">7.3 交付项目（明远、广药、商飞）怎么讲</a>
+<a class="nav-item lv2" href="#sec-7-4">7.4 早期经历怎么一句话带过</a>
+<a class="nav-item lv2" href="#sec-7-5">7.5 准备三个技术难点故事（STAR 模板，背熟）</a>
+<a class="nav-item lv1" href="#part-8">第八部分　HR 面与临场细节</a>
+<a class="nav-item lv2" href="#sec-8-1">8.1 HR 面的核心逻辑</a>
+<a class="nav-item lv2" href="#sec-8-2">8.2 反问环节：问什么最加分</a>
+<a class="nav-item lv2" href="#sec-8-3">8.3 面试前 30 分钟速记卡（附录）</a>
+<a class="nav-item lv2" href="#sec-8-4">8.4 临场注意事项</a>
+<a class="nav-item lv1" href="#part-9">第九部分　全真模拟问答：面试官问、你直接答</a>
+<a class="nav-item lv2" href="#sec-9-1">9.0 这一章怎么用（先读这个）</a>
+<a class="nav-item lv2" href="#sec-9-2">9.1 模拟第一场：AI Agent 开发岗技术面</a>
+<a class="nav-item lv2" href="#sec-9-3">9.2 模拟第二场：Java 高级开发岗技术面</a>
+<a class="nav-item lv2" href="#sec-9-4">9.3 模拟第三场：技术经理岗管理面</a>
+<a class="nav-item lv2" href="#sec-9-5">9.4 模拟第四场：HR 面</a>
+<a class="nav-item lv2" href="#sec-9-6">9.5 高压与意外场景：六种难堪时刻的标准接法</a>
+
+</nav>
+
+<main id="top">
+  <div class="hero">
+    <h1>面试准备手册</h1>
+    <p>技术经理 / AI Agent 开发 / Java 高级开发 · 三方向全覆盖<br>刘苇 · 18 年企业级软件研发经验 · 2026 年 10 月</p>
+    <span class="tag">与 Word 版内容一致 · 手机复习版</span>
+  </div>
+  <section class="part" id="part-1"><h1>第一部分　面试总策略：先把自己的定位想清楚</h1></section>
+<h2 id="sec-1-1">1.1 你的三句话定位（必须张口就来）</h2>
+<p class="body">面试官对你的第一印象，取决于你能不能用三句话把自己说清楚。这三句话请背到脱口而出：</p>
+<ul class="points"><li>第一句（资历）：我有 18 年企业级软件研发经验，前 10 年主要做 Java 大型平台，服务过航空、通信、政务、医药这些行业客户；最近两年全力在做 AI 智能体的落地。</li><li>第二句（代表作）：我主导了公司级的 AI 数据智能分析驾驶舱，从架构做到上线——用大模型帮业务人员直接对话取数、自动生成大屏、自动发现数据异常，而且每个数字都能说清楚是怎么算出来的。</li><li>第三句（差异化）：我的特点是既能做架构设计和核心编码，也能带团队交付——带过 7 人的研发团队，也当过技术总监。放哪儿都能干活，不挑角色。</li></ul>
+<div class="tip">这三句话的关键在于：不是罗列技术名词，而是让对方 30 秒内明白你是谁、你做成过什么、你和别人比强在哪。面试全程的所有回答，都要往这三句上靠。</div>
+<h2 id="sec-1-2">1.2 面试的六条基本打法</h2>
+<ul class="points"><li>一、讲项目用四段式：背景（为什么要做）→ 难点（卡在哪里）→ 做法（我怎么解决）→ 结果（数字说话）。先给结论，再展开细节，别上来就讲技术栈。</li><li>二、每个技术点准备两个版本：一句话版本（30 秒说清是什么、为什么）和三分钟版本（具体怎么做、踩过什么坑）。面试官不追问就一句话收住，追问了再展开。</li><li>三、不会的问题不硬撑：先讲你会的相邻内容，再坦诚说这块没实际生产经验，最后补一句你会怎么去补——比如「RAG 我们项目里没有上，但迁移到工业场景是第一优先级，我的补法是……」。诚实加思路，比不懂装懂加分得多。</li><li>四、所有回答尽量落回自己的真实项目。面试官问概念，你答概念之后加一句「在我们项目里是怎么用的」，立刻和其他候选人拉开差距。</li><li>五、数字必须背熟：5 块大屏、82 张卡片、34 个钻取层、4 张流程图、6 道护栏、9 个分析技能……数字是可信度的最快来源。</li><li>六、主动把话题引到主场。你的主场是 AI 驾驶舱项目和 Java 平台架构，只要有机会就把话题往这两个方向带，别被面试官牵着在你不熟的地方越走越远。</li></ul>
+<h2 id="sec-1-3">1.3 必背数字清单（面试前一晚再过一遍）</h2>
+<div class="tablewrap"><table><thead><tr><th>数字</th><th>说的是什么</th></tr></thead><tbody><tr><td data-label="数字">18 年 / 10 年</td><td data-label="说的是什么">总研发年限 18 年；其中 Java 大型平台 10 年；近两年主攻 AI Agent</td></tr><tr><td data-label="数字">5 块 / 82 张 / 34 层</td><td data-label="说的是什么">固定大屏 5 块；后端卡片 82 张；指标钻取层级 34 个</td></tr><tr><td data-label="数字">20 张 / 23 个</td><td data-label="说的是什么">Doris 里 20 张业务表（另有 1 张中转表）；23 个语义视图</td></tr><tr><td data-label="数字">4 张图</td><td data-label="说的是什么">LangGraph 流程图 4 张：问答、大屏、指标计划、异常洞察</td></tr><tr><td data-label="数字">6 道护栏 / 三层防御</td><td data-label="说的是什么">只读、视图白名单、个人信息拦截、时间条件必填、比率禁求和、强制行数上限；数据库账号 + 代码守卫 + 语义校验三层</td></tr><tr><td data-label="数字">9 个分析技能</td><td data-label="说的是什么">趋势、排行、构成、质量诊断、闲置盘点、费用归因、覆盖度诊断、检索质量、大屏规划</td></tr><tr><td data-label="数字">20 轮 / 1000 次 / 5000 万</td><td data-label="说的是什么">异常洞察单次调查的轮数上限、查询次数上限、Token 预算上限（时长 30 分钟）</td></tr><tr><td data-label="数字">最多 2 次</td><td data-label="说的是什么">护栏拒绝后把原因喂回模型自修的次数（校验、执行、修复共享这 2 次）</td></tr><tr><td data-label="数字">递归上限 40</td><td data-label="说的是什么">问答图整条流程最多走的步数，防止流程绕死循环</td></tr><tr><td data-label="数字">不超 3 问</td><td data-label="说的是什么">AI 造屏前的澄清追问最多 3 个问题，每个问题给 2 到 5 个选项</td></tr><tr><td data-label="数字">卡片上限 36</td><td data-label="说的是什么">AI 一次生成大屏的卡片数量上限，覆盖不够只回补 1 次</td></tr><tr><td data-label="数字">5 类 / 6 轮 / 90 天</td><td data-label="说的是什么">长期记忆 5 种类型；短期记忆取最近 6 轮对话重建上下文；事实类记忆保存 90 天</td></tr><tr><td data-label="数字">10~20 条</td><td data-label="说的是什么">每次提问前从长期记忆里召回的条数（按权重和时间排序）</td></tr><tr><td data-label="数字">9 个平台</td><td data-label="说的是什么">公司 9 个 AI 平台各有控制台，是驾驶舱项目的起因</td></tr><tr><td data-label="数字">7 人团队</td><td data-label="说的是什么">3 后端、2 前端、2 测试；另有 AI 驾驶舱 2 人小组</td></tr><tr><td data-label="数字">19 张 / 亿级</td><td data-label="说的是什么">MySQL 元数据表 19 张；Doris 按小时粒度亿级行设计</td></tr></tbody></table></div>
+<h2 id="sec-1-4">1.4 三个岗位方向，分别主打什么牌</h2>
+<p class="body">你投的是三个方向：技术经理、AI Agent 开发、Java 高级开发。同一个项目，对不同面试官要换不同的讲法重心：</p>
+<div class="tablewrap"><table><thead><tr><th>应聘方向</th><th>主打牌</th><th>讲到什么深度</th></tr></thead><tbody><tr><td data-label="应聘方向">AI Agent 开发</td><td data-label="主打牌">AI 驾驶舱全流程：流程编排、约束大模型、记忆、成本控制</td><td data-label="讲到什么深度">技术细节全展开，准备被连环追问到第四层</td></tr><tr><td data-label="应聘方向">Java 高级开发</td><td data-label="主打牌">SkyForm 平台架构、分布式链路（Dubbo + Kafka + 检索引擎）、数据库功底</td><td data-label="讲到什么深度">AI 项目讲架构和工程化，Java 基础题必须答得干净利落</td></tr><tr><td data-label="应聘方向">技术经理</td><td data-label="主打牌">带 7 人团队的完整流程、交付纪律、跨部门协作、技术选型决策</td><td data-label="讲到什么深度">管理和协作占七成，技术讲思路不讲细节</td></tr></tbody></table></div>
+<p class="body">无论哪个方向，开场自我介绍里三个方向都要点到，让对方自己挑感兴趣的往下问——他要问什么，你就把哪个版本讲透。</p>
+<section class="part" id="part-2"><h1>第二部分　开场与通用问题</h1></section>
+<h2 id="sec-2-1">2.1 自我介绍（三个版本都要练熟）</h2>
+<h3 id="h3-2-1-1">30 秒电梯版（电话初筛用）</h3>
+<p class="body">「面试官您好，我叫刘苇，18 年企业级软件研发经验。前 10 年主要做 Java 大型平台，带过团队、当过技术总监；最近两年在公司主导 AI 数据智能分析驾驶舱，从架构到上线，用大模型帮业务人员对话式取数和自动生成大屏。我的特点是架构、编码、带团队三件事都能自己顶上去。今天想跟您聊聊咱们的这个岗位。」</p>
+<h3 id="h3-2-1-2">2 分钟标准版（技术面开场用）</h3>
+<p class="body">「我叫刘苇，计算机硕士，18 年研发经验，目前在南昌，一个月内可以到岗。</p>
+<p class="body">我的经历分三段。第一段是前 10 年，从物流 ERP、汽车制造 MES 做起，后来到平台架构，2015 年起带团队、做技术总监。第二段是 2016 年到现在，在北京天云融创，负责 SkyForm 产品族的架构和核心研发——就是集群管理和算力应用平台，微服务架构，服务过航空、医药这些行业客户，也带过 7 个人的研发团队（3 个后端、2 个前端、2 个测试），从需求评审到上线复盘全流程负责。</p>
+<p class="body">第三段是最近两年，我主导公司的 AI 数据智能分析驾驶舱。起因是公司 9 个 AI 平台各算各的账，管理层说不清 AI 到底用了多少钱、用在哪。我带着一个 2 人小组，从数据底座到智能体层把这套系统做出来了：固定大屏 5 块、后端卡片 82 张、34 层指标钻取；另外做了 AI 问答和 AI 造屏，业务同事原来要写 SQL 才能拿到的数，现在用自然语言问一句就行，而且每个数字都能一路下钻、说清口径。</p>
+<p class="body">技术栈上，Java 是我的主语言，Spring Boot 微服务、Dubbo、Kafka、ElasticSearch、MySQL 这些都是生产环境用了多年的；AI 这块主要用 Python、LangGraph、FastAPI，加上 Doris 做分析库。日常我也重度使用 Claude Code 这类 AI 编程工具，研发效率比传统方式高不少。</p>
+<p class="body">我看咱们这个岗位需要……（此处现场补一句和 JD 的对应点），这两点正好是我过去两年天天在做的事。」</p>
+<h3 id="h3-2-1-3">技术经理岗位版（管理面开场用）</h3>
+<p class="body">在 2 分钟版基础上，把第三段压缩成一句话，重点展开带团队的部分：「我带 7 人团队是按『需求评审、技术方案、拆解排期、开发联调带代码评审、测试验收、上线复盘』这六步推进的，对进度、风险和质量负责。我的管理风格是——标准定在流程里，不靠人盯人：口径、规范这些关键约束我们都是写成代码和配置、走评审的，团队换人标准不丢。」</p>
+<div class="tip">自我介绍最常见的失分点是流水账式报简历。记住：对方手里就有你的简历，你讲的应该是简历上看不出来的东西——你的思路、你的判断、你做成事的方法。</div>
+<h2 id="sec-2-2">2.2 通用高频问题（每个都要准备 30 秒版本）</h2>
+<div class="qa"><div class="q">问题 1｜为什么这个时候在看机会？（离职原因，最高频也最敏感）</div>
+</div>
+<p class="body">你正在办离职手续，这个问题一定要提前统一口径。给三种可选话术，选一个你自己认同的，全轮次面试（包括 HR 面）保持一致：</p>
+<ul class="points"><li>发展版（推荐）：「我在现公司做了九年，从 0 搭起了南昌的研发团队，SkyForm 产品族和 AI 驾驶舱这两个我主导的产品也都到了稳定交付的阶段——该打的仗打完了。我现在想把 AI Agent 这条线在更大的场景里继续做深，所以选择在这个节点看机会。」——把离职包装成『一个阶段完成、寻找新战场』，正向且无法反驳。</li><li>中性版：「公司和我个人协商一致解除劳动合同，属于正常的组织调整。我对老东家没有负面评价，九年时间我和公司互相成就，这段经历我很珍惜。」——适合对方追问细节时收住话题。</li><li>避坑提醒：绝对不说前公司坏话；不主动提「裁员」「裁员赔偿」这类词，即使实际是协商解除，也用『协商一致、好聚好散』带过；对方再深挖就用发展版收回来——「所以我看机会的核心标准是 AI 落地场景大不大、团队专业不专业。」</li></ul>
+<div class="qa"><div class="q">问题 2｜你 44 岁了，为什么还在写代码？以后怎么打算？</div>
+</div>
+<p class="body">这题是年龄敏感岗位的必考题，答好了反而变成加分题。</p>
+<ul class="points"><li>核心答法：「我不觉得年龄是个问题，我觉得它是个筛选器——它筛掉的是那些停止学习的人。我最近两年在做的 AI 驾驶舱，用的 LangGraph、FastAPI、Doris 都是这两三年才成熟的技术，我是带着 10 年 Java 功底现学的，一年内做到了公司级的上线产品。体力上我确实没法跟 25 岁比，但我有三样东西是他们没有的：一是踩坑经验，很多问题我一眼就知道坑在哪；二是成本意识，我知道什么该做精、什么该买、什么不该做；三是确定性，我交付过的系统都还活着。」</li><li>如果对方继续追问规划：「我的规划是技术管理双线走。带团队我带过，核心编码我现在也没放下——AI 驾驶舱的智能体层就是我亲自写的。哪个岗位缺人我补哪个，这个阶段的我反而没有年轻人那种『只能选一头』的焦虑。」</li></ul>
+<div class="qa"><div class="q">问题 3｜说说你最大的优点和缺点</div>
+<ul class="points"><li>优点（选和岗位最相关的两条讲事实）：「第一是能把复杂的事情讲简单。AI 驾驶舱立项时最大的阻力是业务方听不懂、不敢用，我把『为什么这个数字可信』做成了每个卡片都能点开看的口径说明，上线后业务方敢拿去汇报了，这就是证明。第二是落地纪律，我的东西不是 demo——5 块大屏 82 张卡片是每天在跑的，固化后的大屏零模型调用、每天自动刷新。」</li><li>缺点（要真实、无害、带改进动作）：「我对工程质量有洁癖，早期带团队时会把关太细，队员觉得我不放手。后来我改了——把标准写进流程（代码评审清单、口径随代码评审），人只审关键节点，执行交给流程。这既解决了我自己的问题，也让团队不用依赖我这个人。」——注意这个缺点同时展示了你的管理成长，一举两得。</li></ul>
+</div>
+<div class="qa"><div class="q">问题 4｜期望薪资多少？</div>
+<ul class="points"><li>策略一（先探后报）：第一轮被问就答：「我更希望先了解岗位的职责范围和级别，薪资我相信咱们有标准的带宽，我尊重公司的体系。」把报价往后拖。</li><li>策略二（被迫报价时给区间+锚点）：「我目前的综合收入是【填写：当前年度总包】，期望在这个基础上有合理增长，理想范围是【填写：期望区间】。具体可以结合职级和总包结构再谈。」——注意报『总包』（基本工资+奖金+补贴的年度总数），别只报月薪，也别虚报到无法自证。</li><li>策略三（被压价时）：「薪资我可以让步，但我更在意的是职级和场景——如果岗位能让我继续主导 AI 方向，钱上有弹性。反过来如果只是普通开发岗，那我的报价就是我的市场判断。」——把谈判从钱引到价值。</li></ul>
+</div>
+<div class="qa"><div class="q">问题 5｜你多久能到岗？手上有其他 offer 吗？</div>
+<ul class="points"><li>到岗：「我在办离职交接，一个月内可以到岗，具体日期可以配合公司安排。」（简历上写的就是月内到岗，保持一致。）</li><li>其他机会（无论有没有都这么答）：「在看机会的过程中有几家在聊，都在 AI 落地这个方向。但我优先看的是场景和团队，不是谁多两三千——这也是我今天来跟您聊的原因。」——有竞争感但不施压，显得抢手又不浮躁。</li></ul>
+</div>
+<div class="qa"><div class="q">问题 6｜你的职业规划是什么？</div>
+<ul class="points"><li>「短期（1~2 年）：在 AI Agent 落地这个方向上做到团队里不可替代的人——我说的不是算法层，是把大模型变成可靠、省钱、敢让领导签字的生产系统的能力，这个能力现在市场上非常稀缺。中期（3~5 年）：带一支从数据到智能体的完整团队，把这套『AI 决定、代码保证』的工程化打法复制到新业务。我不想做纯管理放下技术，也不想做只会写代码看不到全局的人——两头都拿得起来，是我给自己的定位。」</li></ul>
+</div>
+<div class="qa"><div class="q">问题 7｜能接受加班/出差/外派吗？</div>
+<ul class="points"><li>加班：「项目关键节点我从不缺位——AI 驾驶舱上线前那两周我基本住在公司。但我平时更相信效率，我用 AI 编程工具把重复劳动压掉，能用八小时做完的绝不拖到十点。紧急加班没问题，长期靠熬时间的团队我反而会反思是不是管理出了问题。」</li><li>出差：「我常年做行业客户交付，明远、广药、商飞这些项目都有驻场和远程支持，客户现场的封闭环境我都干过，出差没问题。」</li></ul>
+</div>
+<div class="qa"><div class="q">问题 8｜你还面了哪些公司？如果我们给你 offer，你怎么选？</div>
+<ul class="points"><li>「主要在看 AI 应用落地方向的公司。选择标准就三条：场景是不是真需求、团队专不专业、我过去能不能主导事情。钱当然重要，但这个年纪找工作，平台和事情本身的权重更高。如果咱们这边方向对得上，我不会为了几百块钱的差价犹豫。」</li></ul>
+</div>
+<section class="part" id="part-3"><h1>第三部分　AI Agent 方向：项目深挖与高频追问</h1></section>
+<p class="body">这是你简历上最亮的一块，也是面试官最好奇、追问最狠的部分。这一章的目标：让对方问不倒你，而且每一层追问你都有一套自洽的逻辑。</p>
+<h2 id="sec-3-1">3.1 项目怎么讲（三个长度版本）</h2>
+<h3 id="h3-3-1-1">30 秒版本</h3>
+<p class="body">「公司有 9 个 AI 平台，每个平台自己一个控制台、自己一套口径，管理层说不清 AI 整体用了多少钱、用在哪、卡在哪。我主导做了一套 AI 数据智能分析驾驶舱：5 块固定大屏回答固定问题，AI 问答应对临时问题，AI 造屏支持业务自己拼专题大屏。我带着一个 2 人小组负责智能体层和数据底座，底层是 Doris 里的 20 张业务表和 23 个语义视图，上面跑 4 张 LangGraph 流程图。最关键的是每个数字都能逐级下钻、说清口径——这套系统现在已经成了公司 AI 投入度量的正式依据。」</p>
+<h3 id="h3-3-1-2">3 分钟版本（在 30 秒版基础上补三块）</h3>
+<ul class="points"><li>补痛点：「做之前的问题具体到什么程度呢——同一个指标在不同平台单位能差上千倍；采集失败了界面上显示 0，管理层以为这个月 AI 消耗归零了；每次汇报靠人工从各平台导数拼表，不同人拼出来的数对不上。」</li><li>补架构：「系统分五层：数据源、采集加工、数据底座、服务层、使用层。数据只有一个流向——从源系统采集入仓，在库内加工，通过语义视图对外，中间没有反向写入，所以任何一个屏幕上的数字都能沿着这条链路回溯到源头。Doris 存指标和明细，按小时粒度、亿级行设计；MySQL 存权限、配置、会话这些元数据，19 张表，两个库职责严格分开。」</li><li>补 AI 层：「AI 这块我们确立了一条核心原则——模型只负责理解问题和组织话术，口径和取数全部由代码管。模型产出的不是 SQL，而是一份受约束的查询计划，经过六道护栏校验才执行。这样同一句话谁问都是同一个数，而且完全可审计。」</li></ul>
+<h3 id="h3-3-1-3">画图讲解版（对方说「你画一下架构」时）</h3>
+<p class="body">在纸上或白板从下往上画五个框：最底下是数据源（AI 网关、智能体平台、知识平台、人事系统）；往上是采集服务和加工服务两个独立进程；再往上数据底座（左边 Doris 写「指标+明细、只读视图」，右边 MySQL 写「权限+配置+会话」）；再往上服务层（大屏数据服务、AI 分析服务、权限管控）；最上面使用层画三个入口（固定大屏、AI 问答、AI 大屏工作台）。最后加一条竖着的贯穿框写「口径与可信保障：指标字典、查询护栏、采集审计」。画完按从下往上顺序讲，5 分钟讲完。</p>
+<h2 id="sec-3-2">3.2 背景与价值：为什么做这个项目（必考）</h2>
+<div class="qa"><div class="q">面试官会问：这个项目的业务价值是什么？怎么衡量？</div>
+<ul class="points"><li>答：三层价值。第一，管理层一个入口看全局——过去要开 9 个控制台拼数字，现在打开一块屏，而且数字可解释、敢进经营会议。第二，分析师从『要数据』变成『自己拿数据』——固定问题看大屏，临时问题问 AI，不用再排队等数据团队排期。第三，数据可信——失败的数不再被画成 0，『这个数为什么是这样』永远有答案。衡量上，系统现在是公司 AI 投入度量的正式口径来源，5 块大屏、82 张卡片每天自动刷新，固定大屏零大模型调用，AI 部分按预算受控调用。</li></ul>
+</div>
+<div class="qa"><div class="q">为什么这个事值得做？直接让人写报表不行吗？</div>
+<ul class="points"><li>答：人工报表有三个死结：慢（每次都要人导数拼表）、不准（口径藏在每个人脑子里，不同人拼出来不一样）、不可追问（数字对不上查不出原因）。固定报表还有第四个问题——临时问题永远预料不到，比如『哪些插件建了没人用』『某个模型上个月是谁在用』，这类问题每次都不一样。所以要一套『固定问题走固定大屏、变化问题走 AI 问答、可信问题走采集状态和溯源』的三路径体系，三条路共用同一套口径。</li></ul>
+</div>
+<h2 id="sec-3-3">3.3 三条设计原则：面试的「魂」</h2>
+<p class="body">这三条原则是这个项目的灵魂。面试官问任何设计决策，你都可以用它们来收口。能把这三条讲透，面试官会认定你是有架构思想的人，而不是堆技术的：</p>
+<ul class="points"><li>原则一：错的数字比查不到更危险。一个显示为 0 的费用，会让管理层以为业务没花钱——这是灾难；而一条『采集失败』的提示只会带来一次追问——这只是麻烦。所以我们的系统里失败绝不兜底成 0：卡片分四种呈现（正常、采集异常、数据不完整、未接入），指标单位没登记就直接报错而不是猜，过滤条件没下推的数据一律作废。</li><li>原则二：口径写在代码和配置里，不写在提示词里。提示词没法版本管理、没法评审，同一个问题两次问可能给出不同口径。所以指标的单位、可加性、聚合方式全部固化在指标字典里，随代码走评审；每张卡片查哪个视图、什么时间窗，一行配置对应一张卡片。改口径必须过评审，历史数字才有连续性。</li><li>原则三：约束靠机制，不靠自觉。系统要交给多个团队长期维护，『大家记得要这样做』的规则最后都会被忘掉。所以每条规则都要有一个会报错的地方：数据库账号只授权了视图、代码层还有只读守卫、语义校验拦截不合法表达式——三层各拦一道，谁想绕都绕不过去。</li></ul>
+<h2 id="sec-3-4">3.4 四张 LangGraph 图：AI 层的全貌</h2>
+<p class="body">大白话：LangGraph 就是给 AI 画流程图的框架。普通聊天机器人是『用户说一句、AI 答一句』，我们的系统是让 AI 按照预先画好的流程图一步一步干活：先做什么、判断之后走哪条路、失败了从哪一步重来，都是图上明确画出来的。为什么这么看重这个？因为生产系统里的 AI 必须可控——出了问题你要能定位是哪一步出的，而不是盯着一段黑盒猜。</p>
+<div class="tablewrap"><table><thead><tr><th>图</th><th>干什么用</th><th>流程（大白话）</th><th>安全阀</th></tr></thead><tbody><tr><td data-label="图">问答图</td><td data-label="干什么用">自然语言取数出图</td><td data-label="流程（大白话）">加载上下文 → 判断意图 → 看有哪些视图 → 生成查询计划 → 校验 → 执行 → 检查结果 → 组织结论 → 画图</td><td data-label="安全阀">整条流程最多 40 步；自修共享 2 次</td></tr><tr><td data-label="图">大屏图</td><td data-label="干什么用">一次生成或微调大屏</td><td data-label="流程（大白话）">先分诊 → 规划要哪些数据 → 生成卡片 → 定设计样式 → 组装 → 自检</td><td data-label="安全阀">卡片最多 36 张；覆盖不够只回补 1 次</td></tr><tr><td data-label="图">指标计划图</td><td data-label="干什么用">出屏前先给人看计划</td><td data-label="流程（大白话）">加载上下文 → 看目录 → 出指标计划 → 自检 → 试执行（每张卡先跑一遍看有没有数）</td><td data-label="安全阀">追问不超 3 问，每问 2~5 个选项</td></tr><tr><td data-label="图">异常洞察图</td><td data-label="干什么用">AI 自主多轮调查巡检</td><td data-label="流程（大白话）">加载数据画像 → 想一步、查一步交替进行 → 得出结论 → 归档</td><td data-label="安全阀">最多 20 轮、1000 次查询、5000 万 Token、30 分钟</td></tr></tbody></table></div>
+<div class="qa"><div class="q">追问：为什么拆成四张图，而不是一张大图？</div>
+<ul class="points"><li>答：四个场景的节奏完全不同。问答是一口气跑完的短流程；大屏是先规划后执行的分层流程；指标计划要人介入编辑；异常洞察是自由度最高的多轮循环。拆开之后每张图的节点、安全预算、降级策略可以独立设计——异常洞察敢给 20 轮预算，问答图就绝不给，因为成本模型不一样。而且图之间共享同一套基础设施（状态定义、工具、记忆、护栏），改一处四张图都受益。四张图各自独立也降低了相互影响的风险——一张图出问题不会把另外三张拖下水。</li></ul>
+</div>
+<div class="qa"><div class="q">追问：LangGraph 的状态是怎么管理的？（考察是否真写过）</div>
+<ul class="points"><li>答：两个关键设计。第一，状态用 TypedDict 定义，其中『执行步骤记录』这个字段用追加式的 reducer——每走一步就往里添一条，而不是覆盖，这样整条推理链完整可回放。第二，数据库连接、服务对象这类『活的东西』不放进状态里，而是在构建图的时候用闭包绑进去——因为状态要能被序列化保存，活对象放进去既存不了也不安全。这个设计让每个节点都是纯函数，单测非常好写：给输入、验输出，不用起数据库。</li><li>加分补充：我们刻意没挂 LangGraph 自带的检查点（checkpointer）。因为多实例部署下它默认是内存的，实例之间不共享，会出现『有时记得有时不记得』的诡异现象。我们的做法是跨请求的上下文一律从 MySQL 消息表重建——可靠、可运维、可排查。这个点特别能体现分布式系统的经验。</li></ul>
+</div>
+<h2 id="sec-3-5">3.5 核心问题一：为什么不让大模型直接写 SQL？（必考第一名）</h2>
+<p class="body">这题几乎一定会被问，是检验你是不是真懂 AI 工程化的试金石。答案分三步讲：</p>
+<ul class="points"><li>第一步：直接写 SQL 有三个致命问题。一是口径不稳——同一个问题今天这么算明天那么算，两次提问两个数，管理层第一个月就不敢用了；二是安全——模型可能生成删改语句、可能查到不该查的敏感表、可能写个没有时间条件的全表扫描把库拖死；三是不可审计——出了错你说不清这个数是怎么来的，没人敢为它签字。</li><li>第二步（打比方）：我们的做法是『模型点菜，厨房炒菜』。模型是个客人，它只被允许看着菜单（语义视图目录）点菜——理解你想吃什么、决定从哪个视图取数、声明要什么维度和指标；但进厨房炒菜（校验、编译、执行 SQL）的永远是代码。菜单上没有的它点不了，点错了服务员（护栏）会打回来让它重填，最多重填两次。</li><li>第三步：具体机制。模型产出的是一份结构化的『查询计划』，计划里只允许 5 种聚合方式（求和、最大、最小、平均、计数）加 4 个辅助函数，禁止 JOIN、禁止子查询，所有筛选值全部参数化。计划先过语义校验（视图列存不存在、表达式合不合法、比率类指标禁止求和），再过查询守卫（六道护栏），最后才到 Doris。每一段失败都返回人话原因喂回模型让它自己改。模型的自由度没有被锁死——它还能主动调 5 个只读的元数据工具去看菜单：看视图长什么样、看有哪些派生指标、看数据覆盖到哪天、搜列、抽样看值。</li></ul>
+<div class="qa"><div class="q">追问：那准确性怎么保证？模型选错视图怎么办？</div>
+<ul class="points"><li>答：四道保险。一是语义视图本身把命名做清楚了——列名是业务名字，不是表字段名，模型选对率高很多；二是取数前有探索步骤，模型可以先查元数据再定计划；三是执行前有试执行（probe），每张卡先跑一遍看有没有数、新鲜度如何，用户确认前就知道哪张卡是空的；四是执行后还有检查节点（inspect），行数异常、空结果会被识别并在结论里说明。还有底线的兜底：护栏拒绝了最多自修两次还不行，就把失败原因如实返回给用户，绝不硬编一个答案。</li></ul>
+</div>
+<div class="qa"><div class="q">追问：为什么不微调一个模型专门写 SQL？</div>
+<ul class="points"><li>答：三个原因。一是成本和周期——微调要标注数据、要训练资源、要持续迭代，对我们 2 人小组不现实；二是效果不稳定——Text-to-SQL 微调在公开数据集上好看，换到自己的业务词汇上还是要靠语义层喂上下文，绕不开；三是审计要求——业务方要的是『每个数字说得清』，这靠的是约束机制而不是模型能力，微调解决不了口径一致的问题。所以我们的路线是把功夫花在语义层和护栏上，模型用现成的，换模型也不影响体系。</li></ul>
+</div>
+<h2 id="sec-3-6">3.6 核心问题二：三层规格与失败自修</h2>
+<p class="body">大白话：我们把 AI 产出的东西分成三张『规格表』。QueryPlan 是一张卡怎么取数（查哪个视图、什么维度、什么指标、什么时间窗）；Blueprint 是一块屏有几张卡、每张卡放什么；DesignSpec 是这块屏长什么样（布局、图表类型、颜色规范）。分三层的好处是职责清楚：取数错了改计划，布局错了改设计，互不牵连。</p>
+<div class="qa"><div class="q">追问：模型输出的 JSON 不稳定怎么办？</div>
+<ul class="points"><li>答：我们自研了一套三段式取数方法。第一段，提示词里内嵌格式的文字描述加一个完整示例——只示范格式，不示范内容，防止模型照抄例子；第二段，宽容抽取——模型返回里可能混着解释文字、代码块标记，先把 JSON 抠出来再解析；第三段，失败回炉——解析失败就把中文报错原文喂回去让它重试，输出被截断的情况单独识别，直接放大 Token 上限重新生成。这套打下来，结构化输出的成功率在生产上够用了。</li></ul>
+</div>
+<div class="qa"><div class="q">追问：自修为什么是 2 次？怎么定的？</div>
+<ul class="points"><li>答：数据说了算。我们统计过护栏拒绝的常见原因——缺时间条件、对比率求和这类错误，模型拿到原因原文后一次就能改对，绝大多数第二轮通过。给 2 次是留了余量，同时防止极端情况下死循环烧钱。这 2 次是校验、执行、修复三个环节共享的总预算，不是每环节各 2 次。超出预算就如实报错给用户——宁可让人介入，不让 AI 无限试。</li></ul>
+</div>
+<h2 id="sec-3-7">3.7 核心问题三：六道护栏与三层防御（最扎实的一块）</h2>
+<p class="body">先记一个总纲：护栏的目的是『AI 可以错，系统不能坏』。模型说错话、选错视图，代价只是重新生成；但查了敏感数据、拖垮了数据库，是事故。所以约束全部放在模型外面。</p>
+<div class="tablewrap"><table><thead><tr><th>六道护栏</th><th>大白话解释</th></tr></thead><tbody><tr><td data-label="六道护栏">只读</td><td data-label="大白话解释">只能查，不能改——所有取数走只读通道，写操作在权限层就不存在</td></tr><tr><td data-label="六道护栏">视图白名单</td><td data-label="大白话解释">只能查 23 个语义视图，底层 20 张业务表模型根本看不见，连表名都不给</td></tr><tr><td data-label="六道护栏">个人信息拦截</td><td data-label="大白话解释">命中手机号、邮箱、身份证这类命名的表和列直接拦掉，并登记在案</td></tr><tr><td data-label="六道护栏">时间条件必填</td><td data-label="大白话解释">没有时间范围的查询一律拒绝——没有边界的统计没有意义，还会全表扫描</td></tr><tr><td data-label="六道护栏">比率禁求和</td><td data-label="大白话解释">『平均响应时间』这类比率不能跨组求和，必须用总量除以次数重新加权算——这是最常见的口径错误</td></tr><tr><td data-label="六道护栏">强制行数上限</td><td data-label="大白话解释">最多返回 N 行，防止一个失控查询把前端和数据库一起拖死</td></tr></tbody></table></div>
+<ul class="points"><li>三层防御怎么讲：「第一层在数据库——Doris 给分析服务的账号是逐视图授权的，不是一把授权整个库，数据库账号本身就查不了白名单外的东西；第二层在代码——查询守卫把六道护栏全部实现成代码，大屏、AI 问答、分析师自助查询共用同一套，人写的 SQL 一样要过；第三层在语义校验——计划里的视图、列、表达式逐个核对。三层任何一层拦住了都不会出事。」</li><li>两个高级点要会讲：一是行级权限——不同部门的人看同一个视图，系统按权限自动拼 WHERE 条件，没权限的数据在模型眼里根本不存在（视图直接从目录里移除）；二是跨域拦截——一张卡只允许查一个视图，防止把不同口径的数据拼在一起算出四不像。</li></ul>
+<div class="qa"><div class="q">追问：护栏会不会太死板，把正常需求也拦了？</div>
+<ul class="points"><li>答：我们刻意让护栏『死』，让上游活。护栏死板保证的是下限——绝不出事故；灵活性给在语义层——业务要的新指标、新维度，走指标字典登记和视图建设来解决，而不是放宽护栏。实践中真正的冲突是比率求和这一类，解法是提供正确算法（加权算），而不是放开限制。上线到现在，护栏误伤的情况很少，拦住的真实错误很多。</li></ul>
+</div>
+<h2 id="sec-3-8">3.8 核心问题四：双层记忆</h2>
+<p class="body">大白话：记忆分两层。短期记忆是便签本——记住本次对话最近 6 轮说了什么，每次请求来了从 MySQL 的消息表把这几轮读出来重建上下文；长期记忆是记事本——系统在回答成功后异步提炼『这个用户偏好什么、关注什么、之前纠正过什么』，存成 5 种类型的条目（偏好、习惯、关注点、事实、纠正），下次提问时按权重和新旧程度召回 10~20 条，拼进提示词开头。</p>
+<div class="qa"><div class="q">追问：为什么不用框架自带的会话记忆？</div>
+<ul class="points"><li>答：因为我们是多实例部署。框架自带的检查点存在单个实例的内存里，用户这一轮被调度到 A 实例、下一轮到 B 实例，记忆就丢了——现象是『有时记得有时不记得』，这种时好时坏的问题最难排查。我们干脆不用它：消息落 MySQL，跨请求从库里重建。好处是可靠（数据库是共享的）、可运维（出问题能直接查表）、可治理（该过期过期）。</li></ul>
+</div>
+<div class="qa"><div class="q">追问：长期记忆记错了、打架了怎么办？</div>
+<ul class="points"><li>答：四个机制。一是主题互斥——同一个主题的记忆只保留最新的，新的生效时旧的自动作废，比如用户换了部门，旧部门记忆不会再来捣乱；二是去重——账号加类型加内容键做唯一约束，重复的记忆权重加一而不是重复存；三是优先级——用户手动设置的记忆不会被自动提炼覆盖；四是权力边界——这是最重要的设计：记忆只影响默认时间窗和表达风格这类『舒服不舒服』的事，绝不影响权限、口径、数字这些『对不对』的事。换句话说，AI 可以记住你喜欢看周报，但它不能因为记住什么就给你看没有权限的数据。</li></ul>
+</div>
+<div class="qa"><div class="q">追问：这套记忆的不足你知道吗？</div>
+<ul class="points"><li>答：知道，而且很清楚——最大短板是没有向量化的语义召回。现在的召回是按权重和时间排序的精确匹配，『用户上次问过类似问题』这种语义层面的关联做不到；记忆条数多了以后长尾偏好会漏。补法也很明确：给记忆表加向量字段，召回改成语义相似度取前 K 条。这正好是我在工业智能体规划里排前面的改造点。</li></ul>
+</div>
+<h2 id="sec-3-9">3.9 核心问题五：AI 造屏与「固化」</h2>
+<p class="body">大白话：AI 造屏就是让业务人员用嘴做大屏。你说『给我一块各部门 AI 用量的专题屏』，系统先追问你最多 3 个问题（每个问题给 2~5 个选项让你点，不让你自由发挥——自由发挥的需求澄清又慢又容易跑偏）；然后产出一份指标计划——这块屏放哪些指标、每张卡取什么数，计划是给人看的、可以手工编辑；确认后每张卡先试执行一遍，让你在确认前就知道哪张卡有数、哪张卡是空的；然后按设计规范自动排版生成；你满意后点『固化』。</p>
+<ul class="points"><li>固化的精髓：固化之后这块屏就变成了一张配置，渲染零次大模型调用，每天自动刷新。为什么这么设计？三个字——稳、省、审。稳：每天看到的口径永远一致，不会今天一个样明天一个样；省：月度经营视图这种每月看一次的屏，不值得每次都调模型；审：版本可追溯、可回退，谁改过什么有记录。</li></ul>
+<div class="qa"><div class="q">追问：造屏质量怎么控制？会不会生成很丑或者很离谱的屏？</div>
+<ul class="points"><li>答：四道关。第一，需求澄清用选项式追问，把模糊需求收敛成明确选项，不给模型自由发挥的空间；第二，指标计划先过自检（口径存在吗、可加吗、时间窗合法吗），再给人确认；第三，样式不是模型自由画——有一份固定的设计规范（DesignSpec），模型在里面选，不发明新样式；第四，生成完有审查节点检查覆盖度，数据覆盖不够只回补一次，还不行就明说缺什么。另外生成的屏纳入大屏库统一管理，不会散落一地。</li></ul>
+</div>
+<h2 id="sec-3-10">3.10 核心问题六：异常洞察与预算控制</h2>
+<p class="body">大白话：异常洞察是自由度最高的场景——发现数据不对劲后，让 AI 像侦探一样自己查案：想一步、查一步，交替进行，最后给出结论。里面内置了 9 个分析技能：看趋势、比排行、拆构成、诊断数据质量、盘点闲置资产、归因费用、诊断覆盖度、评估检索质量、规划大屏。技能不是代码，是 JSON 数据——每条技能写清楚『什么情况下用、分析的要点是什么、优先看哪些视图』，用关键词先粗匹配（不花一分钱），再由意图节点确认，注入前还会按当前语义目录过滤掉过期视图。</p>
+<div class="qa"><div class="q">追问：AI 自己查案，怎么防止它失控烧钱？</div>
+<ul class="points"><li>答：给自由度套上预算的笼子。单次调查最多 20 轮、1000 次查询、5000 万 Token、30 分钟，四个硬上限任一触发就收尾。有意思的设计是：轮数预算先让 AI 自己根据问题复杂度估计，系统再给硬上限——AI 说要查 8 轮，只要不超 20 就尊重它；它说要 100 轮，系统直接砍到 20。这套机制的价值是让 AI 的自主性和成本可控性同时成立，这也是我们敢把它放到生产环境的原因。</li></ul>
+</div>
+<div class="qa"><div class="q">追问：为什么异常洞察敢给这么高的自由度，问答不行？</div>
+<ul class="points"><li>答：场景性质不同。问答的产出是一个数，错一个数就是错账，所以要严约束；异常洞察的产出是一份调查报告，本质上还是『建议人去看』，而且它调的工具一样是只读的、受护栏的——自由的是调查路径，不自由的是数据访问。还有一点，它的每一步都推事件流给前端，用户全程看得见 AI 在干什么，可回放。</li></ul>
+</div>
+<h2 id="sec-3-11">3.11 核心问题七：提示词工程与模型治理</h2>
+<div class="qa"><div class="q">你们的提示词是怎么管理的？</div>
+<ul class="points"><li>答：提示词在我们的体系里是『编排层资产』，不是『口径载体』。口径、公式、单位绝不写进提示词（那句『口径写在代码里不写在提示词里』再说一遍），提示词只负责教模型怎么干活：怎么理解任务、输出什么格式、按什么步骤想。提示词里的示例标注『只示范格式』防止照抄；技能注入前按语义目录过滤，过期内容不进提示词。</li></ul>
+</div>
+<div class="qa"><div class="q">模型怎么选型？换模型怎么办？</div>
+<ul class="points"><li>答：双模型分工——意图分类、格式抽取这类简单活用便宜快速的模型，规划和推理用主力模型，省钱且快。所有调用走我们自研的客户端，按服务地址自动识别两家主流协议，换模型改配置不改代码。流式输出的思考流做了增量归一——两家协议的思考流字段名不一样，我们在客户端统一掉了，前端无感。并发上用信号量把大模型调用限到 2 个并发，既保护下游配额又控制成本。</li></ul>
+</div>
+<div class="qa"><div class="q">AI 挂了怎么办？（降级与容错）</div>
+<ul class="points"><li>答：分场景降级。意图分类模型不可用，就默认按普通问答处理——功能降级但服务可用；流程框架依赖缺失，AI 接口返回明确的『功能不可用』而不是英文异常堆栈；固定大屏本来就不经过大模型，AI 全挂了大屏照样秒开。还有递归上限的优雅降级——流程走到上限，返回的是『这个问题比较复杂，请缩小范围』这样的人话，不暴露内部错误。总的原则：AI 是增强，不是命门。</li></ul>
+</div>
+<h2 id="sec-3-12">3.12 核心问题八：可观测性与流式体验</h2>
+<ul class="points"><li>事件流：AI 干活的每一步——理解成什么、选了哪个视图、生成了什么查询、查回多少行——都推事件给前端逐步呈现，同时落库存成 JSON 可回放。为什么这么重？因为『这个数字怎么来的』答不出来，整套系统就没人敢用。可观测不是运维的奢侈品，是用户信任的来源。</li><li>流式：思考过程和结论用流式（SSE）推送，用户看着 AI 一步步想，等待焦虑小很多；推送用 NDJSON 格式，经过反向代理稳定，命令行也能直接看。推送失败不影响主流程——用户拿不到过程流，但结果照样出。</li><li>运维配套：采集状态页按时间倒序展示每轮采集的成败统计和上游错误信息，『过滤丢失』（上游没按我们传的条件过滤，采回来的是整个空间的数据）这种最危险的信号标红置顶、数据一律作废。还有作业看板、探针、锁状态查询。</li></ul>
+<h2 id="sec-3-13">3.13 RAG 与向量检索：没做过也要讲明白</h2>
+<p class="body">这是当前项目的真实短板，但面试不能露怯——要展现出『我知道它是什么、为什么我没用、要用的话怎么上』的完整认知。这块按下面的顺序准备：</p>
+<ul class="points"><li>一句话解释（大白话）：RAG 就是让 AI 开卷考试。把资料先切成小段、编上『语义指纹』（向量）存进检索库；用户提问时先把问题也变成指纹，找出最像的几段资料，塞进提示词里让 AI 照着资料回答。这样 AI 答的是你资料里的话，而不是它记忆里编的话。</li><li>完整流程（要能白板画）：文档准备（解析 PDF、Word、网页，扫描件要 OCR）→ 切块（按章节语义切，不是机械按字数切）→ 向量化（用中文向量化模型把每段变成一串数字，意思越近数字越近）→ 入库（向量数据库）→ 检索（用户问题向量化后找最相似的几段，最好混合检索：向量找语义近的 + 关键词找术语准的，两路合并）→ 重排（用重排模型把最相关的排前面）→ 拼进提示词生成答案。</li><li>常见选型（报得出口径）：向量库选 Milvus（国产、支持亿级、社区活跃）或 Qdrant（轻量、性能好）；中文向量化模型常用 BGE 系列；重排用 bge-reranker 这类交叉编码器——它比向量召回精度高一截，是提升准确率的关键一环；检索框架可以用 LlamaIndex 或 LangChain；工业文档常见扫描件，OCR 用 PaddleOCR（中文识别优于国外方案）。</li></ul>
+<div class="qa"><div class="q">追问：你们项目为什么没有做 RAG？</div>
+<ul class="points"><li>答：场景决定的，不是能力缺失。我们的知识是结构化的——指标口径、视图目录、业务规则，这些用『语义目录 + 指标字典』管理更精确：语义目录每 10 分钟从数据库元数据自动刷新，人工校准，比向量检索的『大概像』要准得多。取数场景要的是确定，不是相似。但我也很清楚边界：一旦要做非结构化知识——产品手册、故障案例、维修记录——没有 RAG 就是死路，所以在我做的工业智能体迁移方案里，RAG 是第一优先级，方案已经细化到选型和分阶段工作量。</li></ul>
+</div>
+<div class="qa"><div class="q">追问：如果让你给现有系统补 RAG，你怎么落地？</div>
+<ul class="points"><li>答：三步走。第一步搭底座：向量库加向量化模型加重排模型，把文档按章节切块入库；第二步接工具：在工具层加一个『检索知识』的工具给模型用——模型判断这个问题需要背景知识时就先查资料再回答，语义目录和 RAG 知识库并存，前者管结构化事实、后者管非结构化背景；第三步升级记忆：给长期记忆表加向量字段，召回从精确匹配改成语义取前 K 条。整个过程不动『AI 决定、代码保证』的主架构——RAG 检索出来的内容一样要过护栏审查。</li></ul>
+</div>
+<h2 id="sec-3-14">3.14 MCP：AI 工具的通用插头</h2>
+<ul class="points"><li>大白话：MCP 是个协议标准，相当于给 AI 工具定了统一的 USB 接口。以前每个工具要为每种接入方式单独写适配，有了这个标准，工具实现一次，任何支持协议的 AI 应用都能插上来用。</li><li>我们怎么用的（体现工程化）：同一套工具定义，我们用 HTTP 接口、命令行、MCP 三种方式同时暴露——加一个工具，三种调用方式同时获得。这对运营的好处是：网页上的 AI 问答、运维本机的命令行、以及公司里任何接了 MCP 的外部 AI 应用，用的是同一份工具和同一套护栏。每次工具调用都推事件记录，用户可见、事后可查。</li></ul>
+<h2 id="sec-3-15">3.15 大模型基础常识（快速过一遍，别在常识题上翻车）</h2>
+<div class="tablewrap"><table><thead><tr><th>概念</th><th>大白话解释</th></tr></thead><tbody><tr><td data-label="概念">Token</td><td data-label="大白话解释">模型计字和计费的单位。一个汉字大约一到两个 Token。对话长度、费用、限速都按它算</td></tr><tr><td data-label="概念">上下文窗口</td><td data-label="大白话解释">模型一次能『看在眼里』的最大内容量。超了就得砍——所以我们只放最近 6 轮对话和 10~20 条记忆</td></tr><tr><td data-label="概念">温度（temperature）</td><td data-label="大白话解释">模型发挥的随机程度。温度低答得稳，温度高答得活。取数这种要准的活用低温度</td></tr><tr><td data-label="概念">系统提示词</td><td data-label="大白话解释">给模型定的『岗位说明书』，排在最前面，规定角色、规则和输出格式</td></tr><tr><td data-label="概念">幻觉</td><td data-label="大白话解释">模型一本正经地编造不存在的东西。治理靠三招：让它引用真实资料（RAG）、约束输出格式（DSL）、事后校验（护栏+溯源）</td></tr><tr><td data-label="概念">Function Calling</td><td data-label="大白话解释">模型可以决定『我需要调用哪个工具』，由系统去执行工具再把结果给模型。我们只用它做只读元数据工具，取数永远代码执行</td></tr><tr><td data-label="概念">RAG vs 微调</td><td data-label="大白话解释">开卷考试 vs 让模型上大学。资料常变用 RAG（改资料就行），固定能力缺失才考虑微调。生产上九成场景 RAG 先行</td></tr><tr><td data-label="概念">Agent 与工作流的区别</td><td data-label="大白话解释">工作流是人把步骤写死，AI 按步骤走；Agent 是 AI 自己决定下一步干什么。我们的产品哲学：能用工作流解决的绝不上 Agent，异常洞察这种必须自主的场景才给自由度，并套预算</td></tr><tr><td data-label="概念">多 Agent</td><td data-label="大白话解释">多个 AI 分工协作，像项目组。协调员接需求、专家干活。我们四张图各自独立，是『轻量多 Agent』形态；完整的多 Agent 协作在工业方案里规划</td></tr><tr><td data-label="概念">语义视图</td><td data-label="大白话解释">给业务表包一层『业务名字的皮』——列名是人类语言，还预置了正确的关联和口径。模型只看得见皮，看不见底表</td></tr></tbody></table></div>
+<h2 id="sec-3-16">3.16 AI 成本控制（技术管理者必问）</h2>
+<ul class="points"><li>我们项目里控制 AI 成本的手段，按层列举：一是路径分流——固定大屏零模型调用，把 80% 的日常流量挡在模型外面；二是模型分级——分类、抽格式用小模型，推理用大模型；三是零 Token 预匹配——技能命中先用关键词正则筛，不花钱，确认才过模型；四是并发闸门——模型调用限并发 2；五是预算硬顶——异常洞察每次 5000 万 Token 上限；六是固化机制——造屏确认后渲染零调用；七是记忆和上下文精打细算——最近 6 轮加 10~20 条记忆，不是越多越好。核心思想：Token 就是钱，每一处提示词长度都要问一句值不值。</li></ul>
+<h2 id="sec-3-17">3.17 AI Agent 高频追问 20 题（快答）</h2>
+<div class="qa"><div class="q">1. 你们用的什么模型？</div>
+<p class="body">生产上双模型：轻模型做分类和格式抽取，主力模型做规划和推理。客户端按服务地址自动适配两家主流协议，模型可替换。</p>
+</div>
+<div class="qa"><div class="q">2. 模型输出不稳定，你们怎么保证每次一样？</div>
+<p class="body">靠机制不靠模型：口径在字典里、取数是受约束的计划、执行前有校验、渲染走固化配置。模型只在『理解问题』这一层有自由度。</p>
+</div>
+<div class="qa"><div class="q">3. 怎么评测 AI 答得准不准？</div>
+<p class="body">三招：一是试执行——每张卡先跑一遍告诉用户有没有数；二是溯源——每次回答都带推理过程和所用视图，错了能定位；三是口径唯一——同一问题任何人问都是同一个数。这也是我们把『可解释』放在『准确率』前面的原因：企业场景里，可解释的错误能改，不可解释的正确不敢用。</p>
+</div>
+<div class="qa"><div class="q">4. 幻觉怎么处理？</div>
+<p class="body">结构上不给幻觉机会：模型产不出自由 SQL、看不见白名单外的表、算术由数据库做；护栏校验加自修兜底；四类状态保证失败不会被圆成一个 0。</p>
+</div>
+<div class="qa"><div class="q">5. 为什么自研，不用 Dify、Coze 这类平台？</div>
+<p class="body">平台适合快速搭原型，但我们的核心诉求是口径治理和安全护栏——查询要过六道护栏、口径要走代码评审、权限要到行级，这些深度定制平台做不了或者要大改。而且我们的自研很克制：流程框架用开源的 LangGraph，自研的是语义层、护栏和工具体系这些真正差异化的部分。</p>
+</div>
+<div class="qa"><div class="q">6. 为什么用 LangGraph？</div>
+<p class="body">要的是显式流程控制：节点、条件边、失败回环都是画出来的，可测试、可降级、可回放。链式框架适合简单串联，我们要的是带循环和分支的状态机。</p>
+</div>
+<div class="qa"><div class="q">7. 响应慢怎么办？</div>
+<p class="body">分级：固定大屏不经过模型、秒开；问答走流式，思考过程边想边看；轻任务用快模型；模型调用限并发保吞吐。取数本身在 Doris 上有预聚合，模型等待时间主要是推理，流式体验解决体感问题。</p>
+</div>
+<div class="qa"><div class="q">8. AI 会取代程序员吗？你怎么看 AI 编程工具？</div>
+<p class="body">我自己就是重度用户——Claude Code、Codex、Trae 这些天天在用，生成、纠错、重构都交给它们。我的体会是：AI 淘汰的不是程序员，是『只会把需求翻译成代码』这一层；需求澄清、架构权衡、为结果负责这三件事，AI 替代不了，而且越来越值钱。</p>
+</div>
+<div class="qa"><div class="q">9. 你们的智能体和市面上聊天机器人本质区别是什么？</div>
+<p class="body">聊天机器人产出文本，我们的智能体产出『经过校验的动作』——一条被执行的查询、一块被固化的屏。文本错了顶多误导，动作错了是事故，所以我们整套架构都是围着『动作安全』设计的。</p>
+</div>
+<div class="qa"><div class="q">10. 数据安全怎么考虑的？</div>
+<p class="body">四层：数据库账号逐视图授权；代码护栏拦敏感表列和缺时间条件的查询；个人信息三源识别（命名、注释、标签）直接剔除并登记；行级权限按部门拼过滤条件，无权数据对模型不可见。另外接口凭据只存摘要和变量名，数据库被拖走也用不了。</p>
+</div>
+<div class="qa"><div class="q">11. 用户问题很模糊怎么办？</div>
+<p class="body">造屏场景用选项式追问，最多 3 问、每问 2~5 个选项；问答场景无主题时走固定三问兜底，零 Token 成本。设计哲学是：与其让模型猜，不如让用户点。</p>
+</div>
+<div class="qa"><div class="q">12. 多轮对话里用户改口了怎么处理？</div>
+<p class="body">意图分类区分新问题、追问和澄清；跨请求上下文从消息表重建，改口后最新一轮的语境权重自然最高；造屏修订支持两条路——零模型逐卡手改，或一句话让 AI 改，用户自己选效率还是省事。</p>
+</div>
+<div class="qa"><div class="q">13. Prompt injection（提示词注入）你们防了吗？</div>
+<p class="body">诚实答：当前系统用户输入直接进提示词，没有专门的注入防护——因为我们的用户是内部员工、工具全是只读，注入的最坏后果是答错话，不是出事故。但要迁移到外部场景，这是 P0 级缺口，方案我清楚：输入隔离（用户内容加标记区隔）、规则引擎拦典型注入模式、输出侧内容审核。</p>
+</div>
+<div class="qa"><div class="q">14. 你们最自豪的一个设计是什么？</div>
+<p class="body">『固化后零模型调用』。它同时解决了稳定、成本、审计三个问题，而且是业务语言能听懂的价值——『每月同口径』这四个字，管理层秒懂。</p>
+</div>
+<div class="qa"><div class="q">15. 上线后遇到过什么事故或困难？</div>
+<p class="body">准备一个真实故事（见第七部分 7.7 的故事模板），比如采集失败被渲染成 0 的历史问题，或上游口径悄悄变更被巡检发现的事，讲『发现—定位—机制化』的过程。</p>
+</div>
+<div class="qa"><div class="q">16. 如果数据量涨 10 倍，系统扛得住吗？</div>
+<p class="body">数据层没问题——Doris 本来按小时粒度亿级行设计，分区覆盖写、动态分区，扩容走加节点；服务层无状态多实例，Nginx 按最少连接分发，加机器即扩；瓶颈会在采集侧的上游接口限速和模型调用的配额，分别靠按源分片和预算闸门兜住。</p>
+</div>
+<div class="qa"><div class="q">17. 你们怎么处理时区、单位换算这种脏活？</div>
+<p class="body">全部在采集和加工层解决，不留给模型和前端：统一小时粒度入仓（实测跨粒度混算能差数十倍）；单位换算系数登记在指标字典里，入仓时一次换算到位；跨系统时间戳口径不同，数据并列展示但绝不求和。</p>
+</div>
+<div class="qa"><div class="q">18. 下一步这个系统会往哪走？</div>
+<p class="body">三条线：知识线——上 RAG 补非结构化知识；协作线——多 Agent 分工加人工确认环节（关键动作人审批）；场景线——往工业场景迁移，工具面从『读分析视图』扩展到『读时序库、调设备接口』，把『AI 决定、代码保证』的范式带过去。</p>
+</div>
+<div class="qa"><div class="q">19. 2 个人怎么做出这种体量的？</div>
+<p class="body">三个杠杆：一是约束式架构——护栏和语义层把大量边界 case 在机制上消灭，不用人肉兜底；二是 AI 编程工具重度使用——脚手架、单测、文档生成全交给工具；三是克制——只自研差异化部分（语义层、护栏、工具体系），流程框架、数据库、前端框架全用成熟开源。</p>
+</div>
+<div class="qa"><div class="q">20. 你觉得 AI Agent 落地最大的坑是什么？</div>
+<p class="body">不是模型能力，是信任。业务方第一次用，AI 给个数对不上他心里的预期，他就永远不用了。所以我们的功夫一半花在『对』上，另一半花在『让用户相信是对的』上——溯源、口径说明、失败明示，都是信任工程。这也是我对 AI 落地的核心经验：技术分只是一半，另一半是让组织敢用。</p>
+</div>
+<h2 id="sec-3-18">3.18 智能体工作原理：脱离项目也能系统讲清</h2>
+<p class="body">前面的章节是『我们的项目怎么做的』，这一节是『智能体的通用原理』——面试官如果来自不同背景（算法团队、平台团队、业务团队），你都需要有一套不依赖具体项目的系统讲法。</p>
+<ul class="points"><li>总纲（30 秒）：大模型本身只会一件事——根据上文预测下一个字。它没有记性（每次对话结束就忘）、不会算术、知识停在训练那天、还爱一本正经地编。所谓智能体，就是给这个『只会预测下一个字的大脑』配上五样东西：感知（把现实世界的信息整理成它能读的输入）、记忆（便签本加记事本）、规划（把大任务拆成小步骤）、工具（让它能查数据、调接口、执行动作）、反思（做完回头检查）。配上之后，它才能独立完成一件多步骤的事。</li><li>运行循环（要能白板画）：接目标 → 规划：列出步骤 → 执行一步 → 观察结果 → 更新计划 → 循环，直到完成 → 交付 → 复盘沉淀。这个循环有两种流派：一种是 ReAct——走一步看一步，适合探索性任务；另一种是 Plan-and-Execute——先出完整计划再逐条执行，适合结构化任务。说清我们的对应实践：固定大屏和问答是规划先行（计划要过校验），异常洞察是 ReAct 加预算（自由探索但受预算约束）——『按任务的确定性选流派』这句话是加分句。</li><li>五个组件各自解决模型什么短板（面试官最爱听这种对应关系）：感知解决『格式』——文档、表格、用户含糊的表达，都要先变成模型吃得了的输入，靠解析、切块、模板；记忆解决『健忘』——会话内的上下文靠消息窗口，跨会话的个性化靠长期记忆库；规划解决『复杂度』——步骤多于三步就必须外置计划（写进状态里），不能全靠模型心里记；工具解决『能力边界』——算术给计算器、取数给 SQL、时效给接口，模型只负责决定调什么、传什么参数；反思解决『自信』——让模型对自己的输出再挑一遍错，或者用规则校验器挑，成本更低更可靠。</li><li>收口：所以判断一个 Agent 系统的水平，不是看它用了多强的模型，是看这五个组件的设计质量——记忆会不会丢、规划可不可控、工具有没有约束、反思是否自动化。这也是我可以快速评估任何一个 Agent 产品的框架。</li></ul>
+<h2 id="sec-3-19">3.19 技术选型与效果映射：什么技术达到什么效果</h2>
+<p class="body">这一节回答面试官的核心关切：『你说了一堆技术，它们分别解决什么问题？』把下面这张表记熟，任何『为什么用 X 不用 Y』的题都能套：</p>
+<div class="tablewrap"><table><thead><tr><th>要达到的效果</th><th>用什么技术</th><th>大白话原理</th><th>我在哪用过/怎么用</th></tr></thead><tbody><tr><td data-label="要达到的效果">输出准（格式不乱）</td><td data-label="用什么技术">结构化约束：JSON Schema、Function Calling、受限 DSL</td><td data-label="大白话原理">不给模型自由写作的机会，只让它『填表』——格式在机制上保证</td><td data-label="我在哪用过/怎么用">查询计划三层 DSL、三段式取数、造屏设计规范</td></tr><tr><td data-label="要达到的效果">回答有依据（不瞎编）</td><td data-label="用什么技术">RAG、引用溯源、试执行</td><td data-label="大白话原理">开卷考试：先把资料找出来喂给它；答案带引用；行动前先试跑</td><td data-label="我在哪用过/怎么用">语义视图 + 溯源 + 每卡试执行；RAG 是补齐项（方案已备）</td></tr><tr><td data-label="要达到的效果">懂这个领域（垂直）</td><td data-label="用什么技术">语义层/指标字典（结构化）+ 领域 RAG（非结构化）+ 领域工具</td><td data-label="大白话原理">领域知识分两种：能写成规则的固化成代码，写不成规则的检索喂给它</td><td data-label="我在哪用过/怎么用">指标字典 + 23 个语义视图；工业方案里配手册 RAG + 设备工具</td></tr><tr><td data-label="要达到的效果">记住用户（个性化）</td><td data-label="用什么技术">双层记忆 + 向量召回</td><td data-label="大白话原理">短期记本轮对话，长期提炼偏好习惯；向量让『类似的』也能想起来</td><td data-label="我在哪用过/怎么用">5 类长期记忆 + 最近 6 轮重建；向量召回在规划清单</td></tr><tr><td data-label="要达到的效果">不闯祸（安全）</td><td data-label="用什么技术">三层护栏、只读工具、行级权限、四态呈现</td><td data-label="大白话原理">约束放在模型外面：账号、代码、语义校验各拦一道</td><td data-label="我在哪用过/怎么用">六护栏 + 逐视图授权 + 失败不渲染成 0</td></tr><tr><td data-label="要达到的效果">省钱（成本可控）</td><td data-label="用什么技术">模型分级、固化、零 Token 预匹配、并发闸、预算硬顶</td><td data-label="大白话原理">贵模型只干非它不可的活；重复的事固化成配置；每次调用都问值不值</td><td data-label="我在哪用过/怎么用">双模型分工 + 固化零调用 + 关键词预匹配 + 5000 万 Token 上限</td></tr><tr><td data-label="要达到的效果">稳定可用（生产级）</td><td data-label="用什么技术">降级、超时、优雅报错、事件流可观测</td><td data-label="大白话原理">AI 挂了系统还得活：每一步有备胎、每次调用看得见</td><td data-label="我在哪用过/怎么用">意图分类降级、递归上限优雅降级、事件流落库回放</td></tr><tr><td data-label="要达到的效果">干复杂任务</td><td data-label="用什么技术">任务分解、多 Agent、SOP 引擎</td><td data-label="大白话原理">大任务拆给多个专职 Agent 或固化流程引擎，AI 只做理解和填参数</td><td data-label="我在哪用过/怎么用">四图分工；工业方案配 BPMN 可执行 SOP</td></tr></tbody></table></div>
+<div class="qa"><div class="q">追问：微调（fine-tune）什么时候才真正需要？</div>
+<p class="body">答三句话定位：知识类需求不要微调（用 RAG，资料常变）；风格和格式类需求优先用提示词加少样本示例（改起来快）；只有当领域语言体系与通用模型差异大到提示词教不会（比如专业术语体系、特殊输出结构），且有一千条以上高质量样本、任务高度固定时，才值得微调。我的项目三种情况都没命中，所以选了语义层加约束的路线——这是按需求选型，不是不会微调。</p>
+</div>
+<h2 id="sec-3-20">3.20 垂直领域智能体：怎么做到「能落地」而不是演示</h2>
+<p class="body">面试官对 AI Agent 岗最大的担心是：你会不会只会调 API 搭 demo。这一节给你一套可复用的方法论，证明你知道从 demo 到生产的全部距离。通用六步法：</p>
+<ul class="points"><li>第一步：领域知识建模——先把领域的知识分拣成两类。能写成规则和口径的（指标定义、业务规则、审批条件）固化成语义层、指标字典、规则引擎，走代码评审；写不成规则的（手册、案例、历史记录）建 RAG 知识库检索喂给模型。垂直领域做的第一件事永远是这个，跳过这步的 Agent 上线即翻车。</li><li>第二步：工具面设计——定义模型『能做什么』。每个工具默认只读、参数受约束、调用全程可见；高风险动作（下单、下发指令、改数据）单独设计成需要人工确认的显式步骤。</li><li>第三步：约束体系——垂直领域的红线各不同：数据分析是不能出错的数字，工业是不能乱动的设备，金融是不能违规的话术，医疗是不能武断的诊断。把红线翻译成护栏和预算，而不是写进提示词求模型别犯。</li><li>第四步：评测基准——上线前先攒 50~100 条该领域的真实问题做成评测集，之后每次改提示词、换模型、加知识都跑回归。没有评测集的 Agent 迭代就是凭感觉。</li><li>第五步：人机协作边界——明确哪些场景 AI 直接答、哪些 AI 给建议人拍板、哪些必须人审批后 AI 才能执行。边界越清晰，业务方越敢用。</li><li>第六步：迭代运营——线上收集坏例，回流评测集，补知识补技能，版本化管理提示词和知识库。Agent 不是交付物，是运营物。</li><li>两个领域的实例对照（证明方法论不是空话）：数据分析领域——我已经完整做成：知识建模=指标字典+语义视图；工具=5 个只读元数据工具+受治理取数；约束=六护栏三层防御；评测=试执行+溯源+口径唯一；协作=AI 给数、口径说明给人来信。工业设备诊断领域——迁移方案已成文：知识建模=设备手册 RAG+故障案例库；工具=时序库查询（TDengine/PromQL）+设备点位读取（OPC-UA/Modbus，只读白名单限频）；约束=物理约束护栏+写操作二次确认；协作=诊断 AI 建议、执行需人工确认；评测=历史故障案例回放。</li><li>万能收口语术：『换垂直领域，变的是知识源和工具面——把分析视图换成时序库、把业务口径换成工艺规范；不变的是骨架：AI 决定、代码保证，护栏、预算、评测、溯源一个都不能少。所以我有信心进入任何新领域，因为我要重建的是内容，而不是架构。』</li></ul>
+<h2 id="sec-3-21">3.21 多 Agent 协作、上下文工程与评测</h2>
+<ul class="points"><li>多 Agent 三种协作模式（大白话）：主管式——一个协调员接需求、分活、汇总，专家各管一摊（最常用）；流水线式——像工厂接力，上一个的产出是下一个的输入（适合文档处理链）；辩论式——两个 Agent 互相挑错、一个裁判拍板（适合高风险结论的交叉验证）。什么时候才需要多 Agent：单上下文装不下、职责需要隔离（权限不同）、任务可并行。反过来说：能用单 Agent 加好工具解决的，就不要上多 Agent——多 Agent 的通信成本和排障复杂度是真实的。</li><li>我们的对应实践：四张图就是轻量的分工形态——共享基础设施、各自独立预算与降级；工业方案里设计的是主管式：协调 Agent 走 ReAct 但只允许调度专家 Agent、不直接碰底层工具——权限隔离做到 Agent 层。</li><li>上下文工程（Context Engineering，近两年的高频新词）：上下文窗口是智能体最稀缺的资源，喂什么、裁什么、按什么顺序排，直接决定效果。四条实践：系统提示放最前且保持稳定；领域知识按需注入（先检索再注入，不是全量塞）；历史对话裁剪（我们取最近 6 轮，再早的靠长期记忆提炼）；重要信息靠前（模型对开头和结尾最敏感）。一句总结：提示词工程的进化版就是上下文工程——从『怎么问』升级到『把什么装进模型的脑子里』。</li><li>评测体系（高级岗必问『怎么证明它好用』）：三层——离线评测集（真实问题加标准答案，改一版跑一遍，防退化）；LLM-as-judge（用模型按评分标准给回答打分，人工抽检校准裁判，规模化评测靠它）；线上指标（采纳率、追问率、护栏触发率、自修成功率——我们每步事件都落库，这些指标天然可算）。记住这句：『评测不是上线前的一次性考试，是持续运营的仪表盘。』</li></ul>
+<section class="part" id="part-4"><h1>第四部分　Java 方向：基础与中间件</h1></section>
+<p class="body">Java 岗的面试通常是『八股 + 项目』结构。八股题拼的是准确和条理，这一章按被问概率从高到低整理答题要点。注意：你是 18 年的老兵，面试官对基础题的容忍度更低——答错一道常识题，比答不出一道难题更伤。以下每条都用大白话给出『标准答案的骨架』。</p>
+<h2 id="sec-4-1">4.1 Java 集合（必问）</h2>
+<ul class="points"><li>ArrayList 和 LinkedList 的区别：ArrayList 底层是数组，内存连续，按下标随机访问快，中间插删要挪后面的元素；LinkedList 是双向链表，插删头尾快，但随机访问要从头数。实践里九成场景用 ArrayList——CPU 缓存对连续内存友好，LinkedList 理论优势在实际中基本体现不出来。</li><li>HashMap 原理（最高频）：底层是数组，每个格子挂一条链表；放元素时对 key 算哈希定格子，哈希撞了就挂链表；链表太长（超过 8 且数组长度够 64）转成红黑树，查找从 O(n) 变 O(log n)；元素个数超过容量乘加载因子（默认 0.75）就扩容翻倍并重新分布。JDK 1.8 的两个改动常被追问：插入改成了尾插（1.7 头插在并发扩容时会成环死循环）；扩容时元素按哈希新增的那一位分流，不用重算哈希。</li><li>HashMap 线程安全吗？不安全。并发下会丢数据（1.8 修复了死循环但依然不安全）。替代：多线程用 ConcurrentHashMap。它的 1.8 实现要说清：不再分段锁，而是直接锁每个桶的头节点，锁粒度更细；读操作基本无锁；扩容时其他线程可以帮忙搬元素。size 用计数器累加，统计时再汇总。</li><li>equals 和 hashCode 的约定：equals 相等则 hashCode 必须相等，反过来不要求。只重写 equals 不重写 hashCode，这个对象放进 HashMap 会出诡异 bug——两个『相等』的 key 找不到同一个格子。</li></ul>
+<h2 id="sec-4-2">4.2 并发编程（必问）</h2>
+<ul class="points"><li>线程池七参数与执行顺序（必考）：核心线程数、最大线程数、空闲回收时间、时间单位、任务队列、线程工厂、拒绝策略。执行顺序要背准：来任务先看核心线程满没满，没满就建核心线程；满了进队列；队列满了再建非核心线程直到最大数；全满了触发拒绝策略（四种：抛异常、调用者自己跑、丢最老任务、静默丢弃）。</li><li>为什么先排队再扩线程？（高频陷阱题）因为队列在中间——按上面的顺序，队列未满时根本轮不到建新线程。这个设计是复用线程优先于扩张线程。实际项目教训：用 Executors 的快捷方法容易出事（无界队列会内存溢出、缓存线程池线程数会失控），生产上手动 new ThreadPoolExecutor，队列给有界，拒绝策略按业务选，线程起有意义的名字方便排查。</li><li>synchronized 和 Lock 的区别：synchronized 是关键字，加锁解锁自动的，1.6 之后有锁升级优化（无锁→偏向→轻量级→重量级），日常够用；Lock 是接口，功能强——可以试锁（拿不到就干别的）、可以限时、可以中断、支持公平锁、还有读写锁和条件队列。选择：简单场景 synchronized，需要灵活控制才用 Lock。</li><li>volatile 是什么：保证可见性和禁止指令重排，但不保证原子性。一个线程改了变量，其他线程立刻看得见。典型用法是状态标志位。要原子性还是得加锁或者用原子类（底层是 CAS——比较再交换，失败就重试）。</li><li>ThreadLocal：每个线程自己的一份变量副本，互不干扰，典型用途是存当前请求的用户上下文。要主动说风险：线程池里线程复用，用完不清理会串数据、会内存泄漏，所以用完必须 remove——我们项目的做法是请求结束的钩子里统一清理。</li></ul>
+<h2 id="sec-4-3">4.3 JVM（常问，答出条理即可）</h2>
+<ul class="points"><li>内存区域：线程共享的有堆（对象所在地，垃圾回收的主战场）和方法区（类的元数据，1.8 后是元空间、用本地内存）；线程私有的有虚拟机栈（方法调用栈帧）、本地方法栈、程序计数器。常见的内存错误：堆不够是 OutOfMemoryError，栈太深是 StackOverflowError（递归没出口那种）。</li><li>垃圾回收：对象优先在新生代 Eden 区出生，Eden 满了触发 minor GC，活下来的进 Survivor 区反复交换，熬过一定年龄晋升老年代；老年代满了触发 full GC，停顿长。大对象直接进老年代。回收算法是『标记—清除、标记—整理、复制』三种思路；主流收集器按场景选：吞吐优先选并行收集，低延迟选 G1（把堆切成小块、按块回收、停顿可控），更大堆和极致延迟看 ZGC。</li><li>线上内存问题排查思路（结合你的经验讲）：先看监控定现象（内存曲线是不是只涨不跌；GC 越来越频繁），再用工具抓堆快照（jmap）或看 GC 日志，分析快照找占比最大的对象类型，顺藤摸瓜找到持有引用的代码。常见元凶：静态集合只加不减、缓存没上限、线程池队列无界、数据库大结果集一次性读入。</li></ul>
+<h2 id="sec-4-4">4.4 Spring 与 Spring Boot（必问）</h2>
+<ul class="points"><li>IoC 大白话：对象的创建和组装交给容器管，你只管声明要什么（注入），不用自己 new。好处是解耦——换个实现改配置就行，测试时也能塞假对象。Bean 的生命周期简版：扫描定义 → 实例化 → 依赖注入 → 初始化回调（ Aware、BeanPostProcessor 前后处理、init 方法）→ 使用 → 容器关闭时销毁回调。</li><li>循环依赖怎么解决（高频）：A 依赖 B、B 又依赖 A。Spring 用三级缓存解决单例的循环依赖：实例化 A 后先把『半成品 A』（已创建未填属性）放进缓存，填属性时发现要 B，创建 B，B 要 A 时从缓存拿到半成品 A 先用着，B 完成，A 再完成。注意：构造器注入的循环依赖解不了，Spring Boot 2.6 以后默认也直接报错让改设计——这也是正确态度：循环依赖本质是设计问题，缓存只是兜底。</li><li>AOP 大白话：把『到处都要做的事』（记日志、开事务、记权限）从业务代码里抽出来，由框架在方法前后自动插入。实现是动态代理：目标类有接口用 JDK 代理（实现同一接口），没接口用 CGLIB（生成子类）。要会说坑：类内部自己调自己的方法，事务切面不生效——因为走的是原始对象不是代理对象。</li><li>Spring 事务失效的场景（高频清单）：方法不是 public；类内部 this 调用绕过代理；异常被 catch 吃掉了；抛的是受检异常而配置只回滚运行时异常；多线程里事务不跨线程传播；数据库引擎不支持事务。每一句都能展开成实战故事——比如你可以说『我们统一的路由基类里就处理过事务提交时机的问题：必须在响应发出前提交，否则用户看到成功但数据没落库』。</li><li>Spring Boot 自动装配原理（必考）：启动类上的组合注解里有个开关，它去读所有 jar 包里的清单文件（spring.factories / 自动配置导入文件），把里面登记的配置类按条件筛选（类路径有这个类、配置开关打开等）后注册进容器——所以引入一个 starter 依赖，功能就自动配好了。要会举例：我们引 Kafka 的 starter，只改了配置文件里的地址，生产者消费者直接能用。</li><li>Spring Cloud 常用组件一句话版：注册中心（服务上线报到、调用方查通讯录，Nacos/Eureka）；配置中心（配置集中管理、动态刷新）；网关（统一入口：路由、鉴权、限流）；负载均衡（调用时挑一个实例，常见轮询、最少连接）；熔断降级（下游抖动时快速失败并走兜底，防止雪崩—— Sentinel/Resilience4j）。</li></ul>
+<h2 id="sec-4-5">4.5 MyBatis</h2>
+<ul class="points"><li>#{ } 和 ${ } 的区别（必考）：井号是预编译占位，值当参数传，防 SQL 注入，99% 的场景用它；美元号是字符串直接拼进去，只用于表名、列名这类不能参数化的地方，而且必须白名单校验——我们护栏里的『表达式白名单』思想跟这是一致的：能参数化的一律参数化，不能参数化的必须白名单。</li><li>缓存：一级缓存是 SqlSession 级，默认开，同一个会话里相同查询直接命中；二级缓存是命名空间级，跨会话，要手动开，多表关联时容易脏读，分布式下更明显——实践建议：生产环境基本靠数据库和 Redis，MyBatis 二级缓存慎用，说这句反而加分。</li></ul>
+<h2 id="sec-4-6">4.6 MySQL（重中之重）</h2>
+<ul class="points"><li>索引原理：主流是 B+ 树——可以想象成一棵多叉的排序目录树，数据只存在叶子层且叶子之间串成链表，范围查询顺着链表走就行；树很矮（千万级数据三层），一次查询就是两三次磁盘访问。主键索引叶子存整行（聚簇索引），二级索引叶子存主键值——用二级索引查到主键再回主键索引取整行，这叫回表；如果要查的列索引里都有，不用回表，叫覆盖索引，这是 SQL 优化最常用的招。</li><li>最左前缀：联合索引 (a,b,c) 相当于按 a 排、a 相同时按 b 排——查询条件必须有 a 才用得上这个索引，只有 b 用不上；a 和 b 都有，c 的范围条件之后的列用不上。还有常见失效场景：对索引列做函数或运算、隐式类型转换（字符串列传了数字）、前导模糊 like（% 开头）、or 两侧有无索引的列。</li><li>事务与隔离级别（必考）：四个特性原子、一致、隔离、持久。并发问题三种：脏读（读到别人没提交的）、不可重复读（两次读的值不一样）、幻读（两次读的行数不一样）。四个隔离级别对应解决；MySQL 默认是可重复读，用 MVCC（大白话：每个事务看到的是数据的一个历史版本快照，读写互不堵）解决不可重复读，加上间隙锁大体防住幻读。</li><li>锁：行锁锁索引记录，没走索引会退化成锁全表（高危！）；间隙锁锁索引记录之间的空隙，防插入、防幻读，也是死锁高发区；死锁的应对：顺序加锁、小事务、设置死锁检测让数据库自动牺牲一个。</li><li>慢 SQL 优化套路（要能脱口而出的流程）：第一步看慢查询日志定位 SQL；第二步 explain 分析——重点看有没有走索引（type 至少到 range）、扫描行数、有没有 filesort 和临时表；第三步对症下药：加或改联合索引、覆盖索引避免回表、大分页改游标方式（where id &gt; 上一页末尾）、大事务拆小、必要时上缓存或读写分离。举例可以说：我们把明细口径重算从『一条大 SQL』改成『分区覆盖写』，重算一个源不会清掉别的源的数据，幂等且快。</li><li>主从复制与读写分离：主库写 binlog（三种格式，行格式最安全），从库拉日志重放。延迟问题：写后立刻读会读到旧数据，应对——关键读走主库、半同步复制、监控延迟。配合分库分表的概念（按什么拆、拆后跨片查询怎么办）也要有一分钟的展开。</li></ul>
+<h2 id="sec-4-7">4.7 Redis（简历没写，但要会用话术接）</h2>
+<div class="tip">你的简历没写 Redis，被问到时的话术：『Redis 我做过缓存层的使用和选型评估，生产上大范围用得不多——我们的场景里分析库本身就是为高并发聚合设计的，权限配置这类元数据量很小，MySQL 直接扛。但 Redis 的核心机制我清楚，您可以从穿透击穿雪崩问到分布式锁。』——先接住，再用下面的内容证明功底。</div>
+<ul class="points"><li>五大数据结构一句话版：字符串（缓存、计数器）、哈希（对象）、列表（队列、最新列表）、集合（去重、共同关注用交并集）、有序集合（排行榜，分数排序天然支持——我们驾驶舱里的排行类卡片如果加缓存，首选它）。</li><li>缓存三大问题（必考）：穿透（查一个根本不存在的数据，每次都打到库）——缓存空值或用布隆过滤器先拦；击穿（一个热点 key 过期瞬间，海量请求同时打到库）——热点不过期或用互斥锁只放一个请求去回源；雪崩（大批 key 同时过期或缓存宕机）——过期时间加随机抖动、多级缓存、限流兜底。</li><li>分布式锁：基础是『设置一个 key、带过期时间、原子完成』（用 set 命令的扩展参数，分开写会出『设了锁没设过期就宕机』的事故）；进阶问题：业务没跑完锁过期了——给锁续期；删锁时删了别人的——锁里存线程标识，删前校验。生产级的做法直接用现成方案（Redisson 的看门狗机制），并说明『我们这类后台系统更多用数据库唯一键做幂等，锁用得更少』——体现按场景选型。</li></ul>
+<h2 id="sec-4-8">4.8 Kafka（简历核心中间件，必须答得漂亮）</h2>
+<ul class="points"><li>架构一句话：生产者把消息按主题写入，主题分多个分区，分区是多副本的追加日志；消费者组成组来消费，组内每个分区同一时刻只给一个消费者——这是顺序和并行的平衡。注册和协调靠集群。</li><li>为什么快（高频）：顺序写磁盘（追加日志，磁盘顺序写接近内存速度）；零拷贝（数据从页缓存直接进网卡，不过应用层）；批量与压缩（攒一批再发再存）；分区并行（多分区多消费者齐头并进）。</li><li>怎么保证不丢消息（三端配置）：生产端确认机制设为 all——首领和副本都落盘才算成功，配重试；服务端把副本数设 2~3、关闭不完整的清理；消费端关自动提交，业务处理成功后手动提交位移。三端各守一段，链路才完整。</li><li>重复消费与幂等：至少一次投递意味着会重复，重复不可避免就要消费端幂等——用业务唯一键去重（我们采集侧的做法就是幂等主键：同一小时同一维度组合命中同一条记录，重跑覆盖而不是累加。这个真实做法搬过来用，非常有说服力）。需要严格有序时：同一个业务键路由到同一个分区（分区内才有序）；重平衡（消费者进出组导致分区重新分配）会造成短暂重复或停顿，应对是静态成员或合理的心跳与会话超时配置。</li></ul>
+<h2 id="sec-4-9">4.9 ElasticSearch（简历里有，至少要讲清原理）</h2>
+<ul class="points"><li>倒排索引大白话：正排是『文档 → 内容』，倒排是『词 → 哪些文档有这个词』——像书后面的索引：词、页码。写文档时先分词，给每个词建到文档的指向；搜索时查词直接命中文档列表，所以全文检索快。</li><li>和 MySQL 的分工：MySQL 强在事务和精确条件更新，ES 强在全文检索和聚合分析；两者常常搭配——业务写 MySQL，变更同步进 ES 供检索。写入过程要点：先写内存缓冲和事务日志（防丢），攒够刷成不可变的段，段合并；近实时是指默认一秒后可搜。分布式要点：索引分片放副本，查询时广播到各分片再汇总；深分页是经典坑（每片都要取前 N 条汇总），用游标 scroll 或 search_after 解决。</li></ul>
+<h2 id="sec-4-10">4.10 Dubbo / 微服务治理</h2>
+<ul class="points"><li>Dubbo 架构（你生产用了多年，要讲熟）：提供者把服务注册到注册中心，消费者从注册中心拿地址列表直接点对点调用（不经过中间人转发，这是它性能好的原因之一）；注册中心挂了不影响已建立的调用，双方本地都有缓存地址。负载均衡在消费端做（随机、轮询、最少活跃——最少活跃能把请求导向处理快的实例，很聪明）。</li><li>Dubbo 和 Spring Cloud 怎么选：Dubbo 是 RPC 方式，二进制序列化，性能高，适合内部服务间大量调用；Spring Cloud 是 HTTP/REST 一家子，生态全（网关、配置、熔断都有现成的），跨语言和对外友好。我们行业云项目用 Dubbox + Kafka + ES 的组合：内部服务调用走 Dubbox，事件和日志走 Kafka，检索和监控分析走 ES——按流量特征选型而不是站队。</li><li>微服务拆分原则（管理 + 架构都问）：按业务边界拆（一个服务管一块业务），拆到『改一个功能只动一个服务』的粒度就差不多；千万别按技术层拆（所有 DAO 一个服务这种）；拆分同时必须配套：接口契约、独立数据库（禁止服务间直连对方库——我们系统里『服务之间禁止互相引用』由静态检查强制，这条原则一脉相承）、链路追踪。</li></ul>
+<h2 id="sec-4-11">4.11 Doris（你项目的主打选型，往深里准备）</h2>
+<ul class="points"><li>Doris 是什么：开源的 MPP 分析型数据库（多台机器并行算一个大查询），列存，兼容 MySQL 协议——用 MySQL 客户端和驱动就能连，这是它落地成本最低的一点。擅长亿级数据的聚合统计，天然适合大屏和报表。</li><li>为什么选它（背熟四条理由）：一是 MySQL 协议兼容，工具链和开发习惯无缝迁移；二是动态分区加分区覆盖写——我们的幂等重算全靠它：每个源系统一张指标表，重算某个源就覆盖那个分区，不会清掉别的源；三是聚合表达力强，有专门的聚合模型可以建表时声明按维度自动求和；四是运维相对简单，扩容在线做。</li><li>三种数据模型（要能区分）：明细模型（存原始明细，我们存明细用）；聚合模型（建表时声明维度和聚合方式，写入自动聚合，查询快但灵活性低）；唯一键模型（相同 key 的新数据覆盖旧数据——我们的指标表用它实现幂等，重跑不累加，这是采集规范『回溯窗口、覆盖重采』的数据库基础）。</li><li>和 MySQL 的分工（我们系统的经典回答）：两个库职责严格分开——Doris 存指标明细（亿级、大范围扫描聚合、没有行锁和事务、只读视图对外）；MySQL 存权限配置会话（万级、高频小事务）。为什么不分着一个用？因为访问模式互不相容：让 Doris 处理登录改配置是错误的（它没有行级锁和跨表事务），让 MySQL 扫亿级行聚合也不现实。</li><li>为什么不拿 ORM 访问 Doris（细节加分点）：分析库不支持外键和单行更新，表结构是多张同构的指标表，用对象映射徒增负担——我们用轻量驱动封装，表结构声明式定义在代码里，能被程序遍历，用来自动生成文档和模型上下文。</li></ul>
+<h2 id="sec-4-12">4.12 分布式通用题</h2>
+<ul class="points"><li>幂等怎么做（结合项目答）：一个操作执行多次结果和一次一样。手段按层次：数据库唯一键兜底（最可靠，我们采集的主键就是）；去重表记录已处理的业务单号；前端传唯一令牌，服务端先查令牌有没有用过；消息消费按业务键去重。核心思想：网络重试不可避免，幂等是所有跨系统调用的默认假设。</li><li>分布式事务（实用主义答法）：强一致方案（两阶段提交、TCC）性能和复杂度代价大，我们这类系统几乎都用最终一致：本地先落业务表和消息表在同一个数据库事务里，再由后台任务把消息发出去，发送成功更新状态，失败重试——配合消费端幂等，整套就是可靠的。要能画出『本地消息表』这张图。</li><li>CAP 大白话：分布式系统在『网络分区必然发生』的前提下，一致性和可用性只能保一个。实用结论是 BASE：基本可用、软状态、最终一致——不追求每一毫秒都一致，追求过一会儿一定一致。注册中心选型就是例子：Eureka 保可用（挂了还能用本地缓存），ZooKeeper 保一致（选主期间不可用）——我们用 ZK 是因为 Dubbo 生态成熟。</li><li>接口设计要点（顺手准备）：版本化（URL 带版本号）；幂等设计（见上）；限流（计数器、令牌桶，网关层统一做）；统一错误码和报文结构；出入参校验前置。我们系统的『入站令牌只存摘要、出站凭据只存环境变量名』这种凭据管理细节也可以拿出来讲，很加分。</li></ul>
+<h2 id="sec-4-13">4.13 高并发架构设计（高级岗必考）</h2>
+<p class="body">高级 Java 岗和普通岗的分水岭就在这一节：不考你背概念，考你敢不敢报数字、能不能讲清代价。先记住一个总纲——高并发的所有手段本质就是三句话：能缓存的别现算、能异步的别同步、能加机器的前提是无状态。</p>
+<ul class="points"><li>先把账算清楚（开口第一句就要显专业）：三个量的关系是『并发数 ≈ QPS × 平均响应时间』。比如日活 100 万、每人平均 20 次请求，一天 2000 万次，按二八原则高峰占两成、高峰再集中到两小时，峰值 QPS 大约 2000 万 × 0.2 / 7200 ≈ 500~600，留三倍冗余就按 2000 设计。面试时先做这个估算再谈方案，立刻和背题的人拉开差距。</li><li>三板斧之一——缓存：多级缓存是标配，本地缓存（Caffeine）扛最热的读、Redis 扛共享的读、数据库只兜底。要说清代价：缓存和数据库的一致性问题，标准答案是『先更新数据库，再删除缓存』，要求更高就加延迟双删和过期时间兜底。三大经典故障（穿透、击穿、雪崩）的对策见 4.7。</li><li>三板斧之二——异步：写操作里『必须马上做』和『可以晚点做』分开——下单必须同步成功，发短信、加积分、更新统计全走消息队列削峰填谷。代价是最终一致和消费端幂等（见 4.12）。真实映射：我们采集侧的『回溯窗口重采』本质就是异步补偿——先标记缺口，后台任务补齐，业务无感。</li><li>三板斧之三——水平扩展：前提是无状态。会话不能放在实例内存里——我们用 JWT + 落库刷新令牌就是为了让任何实例都能处理任何请求；定时任务不能埋在接口进程里——我们采集、加工是独立进程，多实例接口不含定时逻辑。这两条是我们系统里真实做对的，面试直接引用。</li><li>流量防护四件套：限流（算法会说四种——固定窗口、滑动窗口、漏桶、令牌桶，网关层统一做，保护的是下游）、熔断（断路器三态：闭合、打开、半开试探恢复，防止下游抖动拖死自己）、隔离（舱壁模式：给不同依赖分配独立的线程池或信号量，一个依赖挂了不连坐——我们的大模型调用信号量限并发 2、采集失败隔离『一个变体失败不影响同轮其他变体』，就是同一个思想）、降级（大促关评论、故障时返回兜底数据——我们的固定大屏不经过大模型，AI 全挂照样秒开，就是天然降级设计）。</li><li>数据库扛不住了怎么办（讲演进路线而不是堆名词）：第一步读写分离（写主读从，处理延迟问题：关键读走主库）；第二步分库分表——垂直分库按业务边界拆、水平分表按分片键拆，分片键的选择决定命运：按用户 ID 分，用户维度的查询永远只打一个片；第三步承受分库的代价：跨片查询要靠冗余或聚合层、跨片事务靠最终一致、扩容靠一致性哈希或翻倍扩容加双写迁移。</li><li>热点数据专题：热点 key（明星商品、爆款文章）——本地缓存加 key 打散（key 后面拼随机分片号，多个 Redis 节点分摊读）；热点账户（大 V 发帖把某一行写爆）——合并写入、异步记账、内存攒批。答这题的加分句：『热点本质是把分布式问题压缩成单点问题，解法就是要么分散它、要么提前算好它。』</li></ul>
+<div class="qa"><div class="q">追问：你们的系统并发量多大？怎么体现高并发？</div>
+<p class="body">诚实报量级再讲机制：我们是企业内平台，接口峰值不高，但数据层是按小时粒度亿级行设计的——高并发的分析查询靠 Doris 的列存和预聚合扛，采集侧靠任务闸门限流保护上游，加工侧分区覆盖写保证重跑幂等。我的观点是：高并发不是堆组件，是每一层都有『拒绝多余流量、重复工作只做一次』的机制——这套机制我在亿级数据场景里验证过。</p>
+</div>
+<h2 id="sec-4-14">4.14 高级分布式技术（高级岗必考）</h2>
+<ul class="points"><li>分布式 ID：分库后自增主键会冲突，UUID 无序且太长（B+ 树插入性能差、索引膨胀），主流是雪花算法——64 位 = 时间戳 + 机器 ID + 序列号，趋势递增、本地生成不依赖网络。必问的坑是时钟回拨：检测到回拨就等待或拒绝发号、用备用机器 ID。说一句『我们分库需求不大所以用的是数据库号段方式，但雪花的问题我能展开』也很稳。</li><li>分布式事务五方案一句话版：2PC（两阶段提交，一票否决、同步阻塞，数据库层用得多，业务系统少用）；TCC（Try 预留、Confirm 确认、Cancel 释放，性能好但业务侵入大，资金类场景用）；Saga（长流程拆成一串本地事务，每步配补偿动作，失败反向补偿）；本地消息表（业务表和消息表同一个库事务落库，后台任务投递消息，配消费端幂等——最实用，也是我们系统的做法）；最大努力通知（对第三方，反复通知加重试策略，对端查证兜底）。选型口诀：强一致付性能代价，九成场景最终一致就够——报单的时间窗口、对账任务兜底，这两个词一定要说。</li><li>一致性哈希：普通哈希取模的问题——节点数一变，几乎所有 key 的映射全部乱掉，缓存瞬间全失效。一致性哈希把节点和 key 都放到一个环上，key 顺时针找最近的节点，增减节点只影响相邻一段；节点少时分布不均，就加虚拟节点打散。应用：分布式缓存、分库分表的扩容方案。</li><li>分布式锁深挖（高级岗爱追问）：Redis 锁的三个坑——业务没跑完锁先过期（看门狗续期）、删了别人的锁（锁里存身份标识，删前校验，或用 Lua 脚本原子校验加删除）、主从切换锁丢失（Redlock 多数派方案，业界对它有争议，保守场景加 fencing token）。ZooKeeper 锁：临时顺序节点 + 监听前一个节点，会话断了锁自动释放，强一致但性能低于 Redis。选型一句话：并发高、可容忍极小概率失效选 Redis；绝对不能两把锁同时生效（资金、任务调度）选 ZooKeeper/etcd。真实映射：我们加工服务的分区覆盖必须单实例串行执行（并发覆盖同一分区会丢数据且不报错），用的就是『单写者』约束——这类设计思想的本质和分布式锁一致。</li><li>超时、重试、幂等三件套（生产事故的半数源头）：调用必须设超时（没有超时的调用等于定时炸弹）；重试必须配指数退避加随机抖动（否则故障恢复瞬间被重试风暴打二次，下游刚爬起来又被按倒）；重试的前提是幂等（唯一键、去重表、状态机）。三句话连着说，面试官就知道你真的处理过线上问题。</li><li>链路追踪：微服务排障靠 TraceID 贯穿全程——入口生成、每个服务传递、日志都带，才能回答『这个请求都经过了谁、慢在哪一跳』。标准是 OpenTelemetry，后端接 Jaeger/SkyWalking。加分映射：我们把这套思想搬到了 AI 系统——每次问答的每一步（理解、选视图、生成、执行）都推事件并落库可回放，相当于 AI 版的全链路追踪，排查『AI 为什么这么答』和排查慢查询是同一套方法论。</li></ul>
+<h2 id="sec-4-15">4.15 高并发演练题：秒杀系统（背熟一套完整答案）</h2>
+<p class="body">秒杀是高并发面试的保留曲目，答案的骨架是一个漏斗——把百万请求层层过滤，最后真正到数据库的只剩几十个：</p>
+<ul class="points"><li>第一层前端：页面静态化 + CDN，按钮点击后置灰防重复提交，验证码或答题削峰（顺便挡机器人）。第二层网关：限流（令牌桶按库存量级放行）、黑名单、登录校验。第三层缓存预扣：库存预热到 Redis，用原子递减预扣——扣到负数直接返回『已抢完』，这一步挡掉了 99% 的请求；同一用户的重复请求用 setnx 去重。第四层异步下单：预扣成功的请求发进消息队列，订单服务慢慢消费，用户端先显示『排队中』。第五层数据库兜底：创建订单 + 扣库存用『where 库存 &gt; 0』的条件更新防超卖，用户 ID 唯一约束防重复下单。</li><li>追问『Redis 预扣后用户不支付怎么办』：订单超时未支付自动取消，库存回补 Redis，允许再次抢——用延迟消息实现关单。追问『怎么防黄牛』：实名限购、设备指纹、行为验证、下单频率画像。追问『和钱包扣款怎么保证一致』：这就是本地消息表加对账的教科书场景——引用 4.14 的方案展开。</li><li>收尾金句：『秒杀没有黑科技，就是三件事——把请求挡在数据库外面、把同步变成异步、把每一步做成幂等。我自己的系统里采集闸门、消息表、幂等主键是同一套思想在不同场景的复用。』</li></ul>
+<h2 id="sec-4-16">4.16 稳定性与性能优化方法论（体现高级感的收口）</h2>
+<ul class="points"><li>稳定性语言体系：SLA（对用户的可用性承诺，如 99.9% = 年停机不超过 8.7 小时）、SLO（内部目标）、错误预算（承诺内允许犯错的额度，花完了就冻结新功能先修稳定性——一句就能讲出 SRE 思想）。监控抓四个黄金指标：延迟、流量、错误率、饱和度（资源水位）；告警分级，防『狼来了』。</li><li>发布安全三件套：灰度发布（新版本先放 5% 流量观察）、Feature 开关（出了问题秒级关闭功能不用回滚代码）、快速回滚（回滚演练过的才叫回滚方案）。我们的多实例滚动发布 + 存活/就绪探针就是这套实践：就绪探针发现依赖不可用就把实例摘出负载而不是重启——避免把一次数据库抖动放大成全站故障，这个细节讲出来非常加分。</li><li>性能优化方法论（防止被问『你怎么做性能优化』时没条理）：第一步定指标（优化哪个接口、目标 RT 多少——没有指标的优化是玄学）；第二步测量（压测复现、火焰图、链路追踪定位瓶颈在算、在 IO 还是在锁）；第三步按瓶颈下手（查数据库看执行计划、查缓存命中率、查锁竞争、查 GC）；第四步验证回归（优化后压测对照，防止按下葫芦浮起瓢）。顺序很重要：先测量后动手，是我们和初级工程师的分界线。</li><li>故障复盘文化：无指责复盘——复盘追问『流程哪里让错误成为可能』，而不是『谁的错』；产出是时间线 + 根因 + 带负责人的改进项，改进项进下个迭代验收。我们每次上线都有复盘环节，这条和 6.5 的管理 SOP 是同一套东西。</li></ul>
+<h2 id="sec-4-17">4.17 系统设计题套路与演练</h2>
+<ul class="points"><li>万能四步法：第一步澄清需求（这个功能给谁用、量级多大、一致性要求多高——先问再答，面试官就是在看你有没有这个习惯）；第二步估算量级（日活多少、峰值 QPS 多少、存储多大，数量级对就行）；第三步画核心链路（把主流程从入口到存储画出来，标注每个环节的技术选型和理由）；第四步讲瓶颈与演进（数据涨 10 倍哪里先崩、怎么扩展、怎么容灾）。</li></ul>
+<div class="qa"><div class="q">演练一：设计一个公司级监控大屏系统（直接用你的项目答）</div>
+<p class="body">这题就是你的主场：分层答——采集层（统一小时粒度、幂等主键、失败留空标记不补 0、跨系统不相加）；存储层（分析库存指标明细用窄表+唯一键模型+动态分区，关系库存权限配置）；口径层（指标字典固化单位与可加性、语义视图对外、查询护栏统一约束）；服务层（大屏数据服务配置驱动零模型调用、多实例无状态）；展示层（大屏、钻取 34 层、状态四态呈现）。任何一个环节都能被追问两层。</p>
+</div>
+<div class="qa"><div class="q">演练二：设计一个短链接服务（通用题热身）</div>
+<p class="body">澄清：读写比大概 100:1，读为主。生成：发号器给自增 ID，62 进制转成短码（不搞哈希避免冲突处理）；重定向：短码查库拿长链接，301 永久跳转（省服务端流量）还是 302（可统计点击）按业务定；性能：热链上缓存（注意三大问题的对策），库层分库分表按短码哈希；可靠性：发号器集群或号段模式避免单点。答到这个深度足够。</p>
+</div>
+<h2 id="sec-4-18">4.18 Java 快答清单（15 题，每题 30 秒内）</h2>
+<div class="tablewrap"><table><thead><tr><th>问题</th><th>答案骨架</th></tr></thead><tbody><tr><td data-label="问题">接口和抽象类的区别</td><td data-label="答案骨架">抽象类是『是什么』的半成品（有状态、有构造），接口是『能干什么』的契约（1.8 后可有 default 方法）。一个类只能继承一个抽象类、可实现多个接口</td></tr><tr><td data-label="问题">String 为什么不可变</td><td data-label="答案骨架">final char 数组 + 类不可继承。好处：字符串常量池复用、hashCode 可缓存、线程安全、作为 map 键稳定</td></tr><tr><td data-label="问题">final / finally / finalize</td><td data-label="答案骨架">final 修饰不可变；finally 保证清理代码执行；finalize 是对象回收前的钩子，已废弃，别用它释放资源，用 try-with-resources</td></tr><tr><td data-label="问题">重载和重写</td><td data-label="答案骨架">重载：同一个类里同名不同参（编译期决定）；重写：子类覆盖父类同签名方法（运行期多态）</td></tr><tr><td data-label="问题">异常体系</td><td data-label="答案骨架">Throwable 分 Error（虚拟机级，别接）和 Exception；Exception 分运行时（空指针、越界，该修代码）和受检（必须处理）。别用异常控制流程</td></tr><tr><td data-label="问题">深拷贝浅拷贝</td><td data-label="答案骨架">浅拷贝复制对象但引用指向同一份内部对象；深拷贝连内部对象一起复制。实现：逐层复制、序列化往返、拷贝构造</td></tr><tr><td data-label="问题">BIO/NIO/AIO</td><td data-label="答案骨架">BIO 一个连接一个线程干等；NIO 多路复用，一个线程看一批连接，就绪了才处理（Netty 的底座）；AIO 异步回调，用得少</td></tr><tr><td data-label="问题">动态代理</td><td data-label="答案骨架">运行期生成代理类，方法调用转发到处理器。JDK 代理基于接口，CGLIB 生成子类。Spring AOP 就是它俩</td></tr><tr><td data-label="问题">JDK 8 之后新特性（挑三个）</td><td data-label="答案骨架">Stream 与 Lambda（声明式集合处理）；模块化（9）；var 局部变量推断（10）；虚拟线程（21）——高并发 IO 的新解法，可以主动聊一句</td></tr><tr><td data-label="问题">HashMap 和 Hashtable 区别</td><td data-label="答案骨架">Hashtable 老古董：方法级全锁、不允许 null 键值；HashMap 非线程安全允许 null。并发场景直接 ConcurrentHashMap</td></tr><tr><td data-label="问题">如何优雅关闭线程池</td><td data-label="答案骨架">先 shutdown（不再收新任务）再 awaitTermination 等已有任务跑完，超时则 shutdownNow 中断，最后补资源清理</td></tr><tr><td data-label="问题">类加载过程与双亲委派</td><td data-label="答案骨架">加载→验证→准备→解析→初始化；双亲委派：收到加载请求先问父加载器，父搞不定才自己来——防止核心类被篡改（自己写个 String 加载不进来）</td></tr><tr><td data-label="问题">什么是内存泄漏（Java 也有）</td><td data-label="答案骨架">对象已无用但被存活对象引用着回收不掉。高发：静态集合、未关闭资源、ThreadLocal、监听器未注销。排查：堆快照看支配树</td></tr><tr><td data-label="问题">接口幂等几种实现</td><td data-label="答案骨架">唯一键、去重表、token 机制、状态机（只允许合法状态流转）、乐观锁版本号——按场景组合</td></tr><tr><td data-label="问题">线上 CPU 飙高排查</td><td data-label="答案骨架">top 找进程 → top -Hp 找线程 → 线程号转十六进制 → jstack 里对号入座看线程栈 → 定位到代码。全程五分钟内说完，显得熟练</td></tr></tbody></table></div>
+<section class="part" id="part-5"><h1>第五部分　数据工程与口径治理（差异化亮点）</h1></section>
+<p class="body">这一部分的内容面试官很少在别人那里听到——它是你项目里独有的工程深度。建议在 Java 面和数据类岗位面试里主动抛出来，它们能把『用过数据库』和『懂数据工程』区分开。</p>
+<h2 id="sec-5-1">5.1 窄表设计：为什么指标表是一行一个值</h2>
+<ul class="points"><li>大白话：指标表不是『一行一个部门、几十列各种指标』的宽表，而是窄表——一行记录『哪个实体、哪个小时、哪个指标、值是多少』。好处有三：新增指标不用改表结构（在指标字典里登记一行就行）；所有数据源的表结构完全同构（一套采集代码通吃）；按指标筛选和扩展都自然。</li><li>配套约束：每个源系统单独一张指标表。原因很硬：重算的最小单位是分区，如果多个源共用一张表，重算 A 源的某天分区会把同分区里 B 源的数据一起清掉——事故级别的坑，用表隔离从结构上杜绝。</li></ul>
+<h2 id="sec-5-2">5.2 均值不能存均值：一个值得讲一分钟的数学坑</h2>
+<ul class="points"><li>这是你的招牌故事之一：均值类指标一律存『总和』和『计数』两行，不存均值本身。为什么？跨小时对均值再平均在数学上是错的——『上午 10 万次调用平均延迟 2 秒』和『下午 3 次调用平均延迟 2 秒』，直接平均会把一天算成 2 秒，但正确的加权算法是总延迟除以总次数，这两个完全不是一回事。我们大屏上的时延、速率全是现算加权值。面试官听到这里一般会点头——这是数据工程功底的直接证据。</li></ul>
+<h2 id="sec-5-3">5.3 幂等采集：重跑不炸账</h2>
+<ul class="points"><li>要点四连：源侧数据有延迟，所以每次采集回溯最近若干小时，重采是覆盖不是累加（数据库层用唯一键模型支撑）；接口失败留空并标记，绝不补 0（把失败当 0，管理层会看到『本月消耗归零』）；跨系统数字不相加（各源时间戳口径和数据延迟不同，并列展示不求和）；任务量有闸门（冷启动会规划出上万个采集任务压垮上游，超限直接拒绝——宁可这轮不采，回溯窗口会补齐）。</li><li>再加两个细节显深度：失败隔离——一个指标变体采集失败不影响同轮其他变体，否则『某接口偶发异常』会变成『今天没有数据』；显示名解析不猜测——按名称匹配对象时候选多于一个就留空并标记歧义，绝不取第一个，因为猜错就是把费用归错人。</li></ul>
+<h2 id="sec-5-4">5.4 维度分两张表：属性与关系</h2>
+<ul class="points"><li>大白话：维度（部门、人员、模型这些分析视角）拆成属性表和关系表。属性表只存当前值——部门改名了大家想看新的；关系表存『谁在哪个期间属于谁』这种归属关系，带生效区间——因为归属变了必须留痕，否则上个月的数字今天再看会变，历史账就对不上了。配套还有关系区间巡检：区间重叠或缺失直接阻断当天的日表派生——宁可今天没报表，不给错的报表。</li></ul>
+<h2 id="sec-5-5">5.5 只暴露视图：一石四鸟</h2>
+<ul class="points"><li>对外的 23 个语义视图做四件事：把窄表转成有业务名字的命名列；按历史口径正确关联维度；把组织层级拆成命名层级列；把可加与不可加的指标物理分开——『对比率求和』这种错误在结构上就写不出来。加上权限设计（分析账号逐视图授权、无权限的视图直接从模型可见的目录里移除），安全性和易用性同时成立。</li></ul>
+<h2 id="sec-5-6">5.6 数据可信的五道保障（收口用）</h2>
+<div class="tablewrap"><table><thead><tr><th>机制</th><th>承担什么</th></tr></thead><tbody><tr><td data-label="机制">指标字典</td><td data-label="承担什么">单位、换算系数、可加性、聚合方式的唯一事实源，写在代码里、变更走评审</td></tr><tr><td data-label="机制">卡片绑定配置</td><td data-label="承担什么">每张卡查哪个视图、取哪些列、什么时间窗、阈值多少——一行配置对应一张卡片，口径文本和取数配置写在同一处，改口径不可能只改一半</td></tr><tr><td data-label="机制">查询护栏</td><td data-label="承担什么">六道护栏，大屏、AI 问答、自助查询共用同一套——人写的 SQL 一样会被拦</td></tr><tr><td data-label="机制">采集审计</td><td data-label="承担什么">每次采集写流水判定新鲜度；空、失败、未接入分开呈现，绝不把失败渲染成 0</td></tr><tr><td data-label="机制">钻取溯源</td><td data-label="承担什么">每个数字逐级下钻到明细；钻取的形态由后端下发、过滤条件逐层累积传递、无法识别的组合拒绝执行</td></tr></tbody></table></div>
+<section class="part" id="part-6"><h1>第六部分　技术经理方向：管理与协作</h1></section>
+<p class="body">技术经理面试考察的是：你有没有一套成体系的管理方法，而不是『人好、肯干』的朴素印象。这一章把你的经历整理成可以成段输出的答案。所有管理答案的底层逻辑只有一句话：把标准放进程序和流程，让团队不依赖任何单个人（包括你自己）。</p>
+<h2 id="sec-6-1">6.1 带 7 人团队的完整讲法</h2>
+<ul class="points"><li>团队构成与分工：「7 个人——3 个后端、2 个前端、2 个测试。我按模块分责任人：后端每人认领 2~3 个模块，从设计到上线端到端负责；前端按屏和组件分工；测试全程介入——不是等开发完了再测，需求评审阶段就参与写验收标准。」</li><li>运转节奏：「节奏是固定的：需求评审会把『做什么、验收标准』定清楚；技术方案评审解决『怎么做』，模块间的接口先冻结；然后拆解排期——任务拆到半天粒度，谁做、多久、依赖谁，白纸黑字；开发期每天 15 分钟站会只对三件事：昨天做完什么、今天做什么、卡在哪；代码必须过评审才能合入；上线前测试验收 + 回归；上线后一周内做复盘——什么做得好、什么下次改，落成清单进下一轮。」</li><li>对结果负责的具体含义：「进度上我每周向公司交一份里程碑对照；风险上前置——排期时就把技术不确定的部分安排探路（先做技术验证再承诺工期）；质量上盯两个点：评审和测试准出。出了问题我先扛、复盘时再定改进，不在会上追责个人——追的是流程哪里漏了。」</li></ul>
+<h2 id="sec-6-2">6.2 高频管理问题快答</h2>
+<div class="qa"><div class="q">1. 排期怎么估？估不准怎么办？</div>
+<p class="body">三层估法：需求评审后先给粗估（误差一倍以内，用于立项）；方案评审后拆到半天粒度细估；留 15%~20% 的缓冲给联调和突发。估不准的常见原因是『只估了顺境』，我要求按『编码 + 自测 + 联调 + 修 bug』四段估，单估编码必然延期。执行中看燃尽：进度偏差超过 10% 当周就调整——加人、砍范围或者调里程碑，绝不憋到最后一周才摊牌。</p>
+</div>
+<div class="qa"><div class="q">2. 项目要延期了怎么办？</div>
+<p class="body">三个动作按顺序：第一，当天同步干系人，不藏着——延期最伤人的是最后时刻才知道；第二，给出带选项的方案：A 砍范围保日期（把 P2 功能挪到二期）、B 加资源（评估热身成本后决定）、C 调日期（给出可信的新依据）；第三，复盘根因——是估时问题、依赖问题还是需求变更问题，把教训落进流程。绝不说『我再想想办法』然后拖着。</p>
+</div>
+<div class="qa"><div class="q">3. 团队成员绩效不行怎么办？</div>
+<p class="body">先诊断再动手：能力问题就结对带、给清晰的小目标和及时反馈；意愿问题就一对一聊，是岗位不合适还是有个人状况；流程问题（需求不清、被别的活打断）就改流程，不冤枉人。给明确的改进期和改进标准，期到了没达标，按制度处理——拖着对本人和团队都是伤害。我处理的原则：对事要有标准，对人要有温度。</p>
+</div>
+<div class="qa"><div class="q">4. 两个核心成员吵架、抢地盘怎么办？</div>
+<p class="body">分开听、当面谈、立规则。先分别单独听双方诉求（很多时候是误会和信息差），再拉到一起只谈事不谈人；如果根源是职责边界模糊——那是我的管理问题，回去把模块归属和接口契约写清楚。长期解法是把『谁对什么负责』写进程序，边界清楚了，九成的地盘之争自动消失。</p>
+</div>
+<div class="qa"><div class="q">5. 怎么做代码评审？会不会流于形式？</div>
+<p class="body">我们的评审有两级：常规评审看清单（命名、边界条件、事务、并发、测试覆盖），快速通过；关键评审看设计——涉及口径、权限、钱的代码必须我来审。防流于形式的两个机制：一是评审意见必须落在清单条目上，不接受『感觉不太好』这种评论；二是把最重要的约束做成机器检查——比如我们系统里『服务之间禁止互相引用』是静态检查拦的，『口径变更』要求字典代码随功能代码一起评审。能机器管的绝不靠自觉。</p>
+</div>
+<div class="qa"><div class="q">6. 怎么带新人？</div>
+<p class="body">第一周给环境、给文档、给一个能跑通全流程的小任务（让新人第一天就有成就感）；第一个月安排导师，每周一次 30 分钟对齐；第一个项目给有边界有验收标准的模块，不放羊。我特别看重让新人 early win——快速建立信心比什么都重要。</p>
+</div>
+<div class="qa"><div class="q">7. 你和产品经理为需求吵过架吗？</div>
+<p class="body">常吵，健康的吵。原则是吵『要不要做』可以，吵完必须落结论；我反对的是不做评估就接需求，也反对为了好做而砍掉价值。具体做法：需求必须有验收标准和优先级，技术上给『完整版 / 简化版 / 不做』三档方案让产品选——把争论从『做不做』变成『做到什么程度』，大部分冲突就化解了。</p>
+</div>
+<div class="qa"><div class="q">8. 怎么向老板汇报坏消息？</div>
+<p class="body">三段式：现状（事实，不修饰）→ 影响（对承诺的里程碑和业务的具体影响）→ 方案（我建议怎么办、需要什么决策）。永远带着方案去汇报坏消息，老板要的是判断依据和选项，不是安慰。</p>
+</div>
+<div class="qa"><div class="q">9. 技术债怎么管理？</div>
+<p class="body">先记账——技术债要有清单和位置，最怕的是『大家都知道哪里烂但没人说』；再定价——每轮迭代固定留 10%~15% 的容量还债，优先还『挡路的债』（影响交付速度和稳定性的）；最后防新增——规范、评审、机器检查把增量债务的利率压低。完全清零不现实，控制利息是关键。</p>
+</div>
+<div class="qa"><div class="q">10. 你如何做技术选型？举个例子。</div>
+<p class="body">我的选型标准只有一条内核：优先选择能把约束固化下来的方案，而不是最灵活最省事的方案。比如分析库选 Doris：看中的就是它的分区覆盖写让『幂等重算』成为可能、MySQL 协议让迁移成本最低——这些是把『数据正确性』固化在机制里。反例是当时也有人建议上更时髦的方案，但那些方案的好处是灵活，代价是口径和正确性靠人保证——人是最不可靠的组件。选型三步：列候选、按『能不能固化约束 / 团队能不能养得起 / 社区活不活』打分、用原型验证最关键的担忧点。</p>
+</div>
+<div class="qa"><div class="q">11. 如何平衡业务压力和技术建设？</div>
+<p class="body">不搞对立，做绑定：把技术建设做成业务提速的杠杆——指标字典看着是『额外工作』，但它让 AI 问答和固定大屏共用一套口径，业务方加需求的成本反而降了。每轮迭代预留 10%~15% 给基建，且优先还挡路的债。用业务的语言汇报技术建设：不说『我们要重构』，说『这个改造能把下季度的交付周期缩短三成』。</p>
+</div>
+<div class="qa"><div class="q">12. 你觉得技术经理最重要的三件事？</div>
+<p class="body">定方向（技术方案和选型拿得动，能判断做什么不做什么）；建机制（流程、评审、检查，让质量不依赖自觉）；养人（梯队、反馈、成长路径，让团队离了谁都能转——包括离了我）。我自己的补充实践是『关键路径亲自下水』：AI 驾驶舱的智能体层是我亲自写的——管理者不下水，机制会慢慢脱离实际。</p>
+</div>
+<h2 id="sec-6-3">6.3 你的管理短板怎么答（诚实但无害）</h2>
+<ul class="points"><li>可能的追问是『你的管理经验有没有不足』。答法：「我的管理经验集中在 20 人以内的研发团队，大团队跨部门的大盘子管理经验不足——这是我到新平台想补的课。另外我的风格偏『机制型』，对情感激励用得相对少，我意识到这点后在有意识地加强一对一沟通的频率和质量。」——先自己说出短板，比被对方挖出来体面得多。</li></ul>
+<h2 id="sec-6-4">6.4 大公司的管理方法：对照着讲，说出落地版</h2>
+<p class="body">面试官（尤其大厂面试官）问管理，潜台词是『你的方法是野路子还是成体系』。你的策略不是假装在大厂干过，而是亮出三段式：「我知道大厂怎么做 → 我在自己的语境里怎么落地 → 效果如何」。下面按方法逐个对照：</p>
+<ul class="points"><li>目标管理：KPI 与 OKR 的区别（必考）。大白话：KPI 是『考核你要你完成的指标』，完不成扣分，容易保守；OKR 是『目标和关键结果』——目标定方向（鼓舞人心），关键结果定可度量的里程碑，鼓励挑战、允许失败、全员公开。讲落地版：「我们规模小，我用的是 OKR 的骨架加 KPI 的纪律：季度定 3 个以内的目标，每个目标挂 2~3 个可度量的关键结果（比如『驾驶舱季度内上线 5 块大屏、口径争议归零』），拆到迭代里程碑，双周对齐一次进展。区别于考核的是：OKR 不直接算工资，保证大家敢定跳一跳的目标。」</li><li>过程管理：敏捷 Scrum 的四个仪式。迭代规划会（这个迭代做什么、为什么）、每日站会（15 分钟，同步进展和阻塞，不是汇报会）、迭代评审（给业务方演示可用成果）、迭代回顾（团队反思改进一件事）。讲落地版：「我们的六步流程就是 Scrum 的本土化：需求评审和技术方案对应规划会，每日站会照搬，测试验收对应评审，上线复盘对应回顾。我坚持的敏捷内核只有一条——每个迭代结束都有一段可演示的、可用的东西，而不是『完成了 80%』这种说法。」</li><li>效能度量：DORA 四指标（大厂研发效能的事实标准，说出来非常加分）。部署频率（多久发布一次）、变更前置时间（一个改动从提交到上线的时长）、变更失败率（多少比例的发布出了问题）、平均恢复时长（出事后多久恢复）。关键认知：「这四个指标度量的是交付体系，不是个人绩效——拿它考核个人必然造假。我们小团队看两个简版：上线频率和缺陷逃逸率，方向一致：让发布更频繁、更安全。」</li><li>沟通与决策的两个大厂做法：亚马逊的六页备忘录——开会先读六页纸，逼着把问题想清楚再讨论，PPT 容易藏住漏洞；1:1 面谈——定期和每个直接下属一对一，聊成长和阻塞，不听汇报。讲落地版：「方案评审我要求书面方案先行——我们的技术方案都是文档先行、评审时先读后讨论；1:1 我做到每月和每个骨干至少一次，聊的是他的成长路径和我能给的支持，不是催进度。」</li><li>绩效与人才：大厂的做法是校准会（多个主管对齐评分标准，防个人宽严不一）加 360 反馈（多维度评价）。讲落地版：「7 人团队我自己评，但我做了两件防偏差的事：评估基于记录（里程碑对照、缺陷数据），不凭印象；重要结论当面反馈并给改进期限。如果去大平台，我需要适应的是校准和更复杂的职级体系——这是我明确知道的学习点。」</li><li>收口金句：「大厂方法五花八门，但内核是四件事：目标可度量、过程有仪式、反馈成闭环、质量靠机制。方法在哪个公司都要本土化，我踩过的坑让我知道哪些能简化、哪些不能省——比如复盘和代码评审不能省，仪式的数量可以减。」</li></ul>
+<h2 id="sec-6-5">6.5 管理动作的详细步骤：从接需求到复盘的完整 SOP</h2>
+<p class="body">6.1 讲的是流程概貌，面试官如果追问『具体怎么跑』，就按这张表展开——每一步都有输入、动作、产出物、卡点。能讲到这个颗粒度，面试官会相信你真的管过，而不是背了一个流程图：</p>
+<div class="tablewrap"><table><thead><tr><th>步骤</th><th>输入</th><th>关键动作</th><th>产出物</th><th>卡点（不满足就不进下一步）</th></tr></thead><tbody><tr><td data-label="步骤">1 需求评审</td><td data-label="输入">PRD / 业务诉求</td><td data-label="关键动作">过验收标准、拆用户故事、评优先级、估粗粒度工作量</td><td data-label="产出物">需求清单 + 验收标准</td><td data-label="卡点（不满足就不进下一步）">没有验收标准的需求不进排期——『做完了』必须可判定</td></tr><tr><td data-label="步骤">2 技术方案</td><td data-label="输入">需求清单</td><td data-label="关键动作">接口设计评审、模块间契约冻结、识别依赖与风险、不确定点先做技术验证</td><td data-label="产出物">方案文档 + 接口契约 + 风险清单</td><td data-label="卡点（不满足就不进下一步）">模块间接口未冻结不开写——联调返工是排期杀手</td></tr><tr><td data-label="步骤">3 拆解排期</td><td data-label="输入">方案 + 契约</td><td data-label="关键动作">任务拆到半天粒度、认领到人、按依赖排序、预留 15%~20% 缓冲</td><td data-label="产出物">排期表 + 里程碑</td><td data-label="卡点（不满足就不进下一步）">技术不确定的部分必须先探路再承诺工期</td></tr><tr><td data-label="步骤">4 开发联调</td><td data-label="输入">排期表</td><td data-label="关键动作">每日站会（15 分钟）、代码评审、联调环境维护、进度看板更新</td><td data-label="产出物">可测版本</td><td data-label="卡点（不满足就不进下一步）">评审不过不合入；进度偏差超 10% 当周调整</td></tr><tr><td data-label="步骤">5 测试验收</td><td data-label="输入">可测版本</td><td data-label="关键动作">按验收标准测试、缺陷分级（P0~P3）、回归测试、业务方验收</td><td data-label="产出物">测试报告 + 验收结论</td><td data-label="卡点（不满足就不进下一步）">P0/P1 缺陷清零才能上线；验收标准是唯一依据</td></tr><tr><td data-label="步骤">6 上线复盘</td><td data-label="输入">验收结论</td><td data-label="关键动作">灰度/回滚预案、发布检查单、复盘会（做得好/下次改）、改进项进下轮</td><td data-label="产出物">上线记录 + 复盘清单</td><td data-label="卡点（不满足就不进下一步）">没有回滚预案不上线；复盘改进项必须有人认领</td></tr></tbody></table></div>
+<ul class="points"><li>过程管理靠三个机制兜底（防止流程变成墙上的画）：一是信息透明——进度、风险、阻塞全部在看板上，谁都能看到，问题藏不住；二是风险上升机制——阻塞超过 24 小时必须上升给我，我解决不了 24 小时内上升给老板，坏消息跑得比好消息快；三是节奏固定——迭代像火车按点发车，需求赶不上这班就订下一班，不为此晚点，团队才有稳定的呼吸节奏。</li><li>质量管理靠两道闸：入口闸——需求和方案的评审卡点（见上表）；出口闸——代码评审清单加测试准出标准。再加一条机器检查：凡是机器能拦的规范（命名、依赖方向、口径变更必须随代码评审）全部做成自动检查，人的注意力只花在机器看不懂的设计问题上。</li></ul>
+<h2 id="sec-6-6">6.6 管理行为面试（BQ）故事库：一个故事打多道题</h2>
+<p class="body">行为面试题千变万化，但你不需要准备几十个答案——准备三四个高质量故事，按问题的角度重新组织就是新答案（一稿多用）。下面是三个管理故事和它们能覆盖的题目，STAR 骨架里的事实都来自你的真实经历：【】标出的地方面试前补上具体数字：</p>
+<div class="tablewrap"><table><thead><tr><th>故事</th><th>能回答的题目</th></tr></thead><tbody><tr><td data-label="故事">M1 进度危机（延期摊牌）</td><td data-label="能回答的题目">讲一次你带的项目出问题 / 如何管理交付风险 / 如何向上沟通坏消息 / 最有压力的经历</td></tr><tr><td data-label="故事">M2 质量机制（口径治理）</td><td data-label="能回答的题目">讲一次你建立的流程或机制 / 如何平衡速度与质量 / 团队犯重复错误怎么办 / 你的管理方法论</td></tr><tr><td data-label="故事">M3 培养新人（early win）</td><td data-label="能回答的题目">讲一次你培养的人 / 如何分配任务 / 团队成员能力不行怎么办 / 你如何激励团队</td></tr></tbody></table></div>
+<ul class="points"><li>M1 进度危机（STAR）：S——「SkyForm 项目群并行交付阶段，客户验收时间锁死，中途需求方插入了一批变更。」T——「我是技术经理，对交付日期和质量负全责。」A——「我做了三件事：当天向干系人摊牌，不拖到最后一刻；给出带选项的方案——A 砍范围保日期、B 加资源、C 调日期，并附上各自的代价分析；最终客户选了砍范围，我们把 P2 功能挪到二期，P0/P1 按期交付。事后复盘把『变更必须走评估』写进了需求评审的卡点。」R——「项目按验收日期通过，多轮修复的约 40 个缺陷也闭环在验收窗口内【可补：验收结论或客户反馈】。」</li><li>M2 质量机制（STAR）：S——「AI 驾驶舱立项时最大的阻力不是技术，是业务方不信数字——历史上采集失败被渲染成 0，同一指标不同平台口径能差千倍。」T——「我要让数字可信到能进经营会议。」A——「我没有靠人小心，而是建了三层机制：口径固化进指标字典随代码评审，改口径必须走评审；查询统一走语义视图加六道护栏，错误在执行前被拦；采集失败、部分成功、未接入分开呈现，绝不兜底成 0。」R——「上线后口径争议归零，大屏数字成为公司 AI 投入度量的正式依据；新增指标只需登记字典，交付速度反而变快——质量和速度不是对立面。」</li><li>M3 培养新人（STAR）：S——「团队进过校招新人，上手周期长、不敢动手是普遍问题。」T——「我要把新人变成三个月内能独立交付模块的人。」A——「第一周给环境、文档和一个能跑通全流程的小任务，让第一天就有产出；第一个月配导师、每周 30 分钟对齐；第一个正式任务选有边界、有明确验收标准的模块，不放羊。给及时反馈，做对了马上说。」R——「新人【补：几周/几个月】就能独立认领模块【可补：具体的人和他们现在的状态】。」</li></ul>
+<div class="tip">BQ 的三条纪律（背故事时记住）：Situation 不超过三句话——面试官想听的是你做了什么；每一句都要能听出『我』的动作，而不是『我们团队』；Result 必须有数字或有可感知的变化，没有量化就没有说服力。同一个故事对不同问题换不同的开场和落点——讲故事前先花一句话点题：『这个例子正好说明我在【题目的能力】上的做法。』</div>
+<section class="part" id="part-7"><h1>第七部分　Java 项目经历问答</h1></section>
+<h2 id="sec-7-1">7.1 SkyForm 产品族怎么讲</h2>
+<ul class="points"><li>30 秒版：「SkyForm 是我们的产品族，核心是集群管理和算力应用平台。我是架构师兼后端全栈：集群管理系统的整体架构和域控管理模块是我负责的；算力平台这边我负责用户、组织、机构、预算四个模块的重构。产品给工业仿真和 AI 应用提供应用云化、许可治理、远程桌面能力，服务过航空、医药行业客户。」</li><li>技术亮点展开点：微服务架构（Spring Boot + Dubbo），支撑多客户私有化部署；域控模块做企业目录集成（LDAP/AD 对接、域控配置、用户同步），期间定位修复过 SSL 握手超时、只读权限、字段校验等一线问题；远程桌面走 VNC/RDP 协议，让用户在浏览器里用上装在数据中心的软件——『应用云化』通俗说就是把原来装在个人电脑上的工业软件搬到机房统一管理、按需分配。</li></ul>
+<div class="qa"><div class="q">追问：LDAP/AD 是什么？（大概率会问，用大白话准备）</div>
+<p class="body">「LDAP 是个查询协议，AD 是微软基于它做的企业目录服务。打个比方：它是企业内部的统一通讯录加门禁卡系统——所有员工、部门、权限都在里面，各业务系统不再自己管账号，登录时去问它。我们域控模块做的事就是：配置和这个通讯录的连接、字段映射和同步规则，让平台用户和企业的组织架构自动对齐。踩过的坑也真实：SSL 证书链不完整导致握手超时、不同版本 AD 的字段语义有差异、只读账号权限配置错导致同步半途失败——这类问题我都是抓包加对照协议文档定位的。」</p>
+</div>
+<div class="qa"><div class="q">追问：预算模块重构，重构了什么？</div>
+<p class="body">「答思路而不是流水账：原实现的问题是配额校验散落在各个业务入口，规则不一致、难以对账。重构的核心是抽象出统一的配额模型——申请、分配、核销、回收四个动作收口到一个服务，规则集中配置，所有入口走同一套校验；再把历史数据按新模型迁移对账。这次重构让我总结出一个原则：重构不是重写，是先把隐性的规则显性化、集中化，再换实现。」</p>
+</div>
+<h2 id="sec-7-2">7.2 行业云项目（Dubbox + Kafka + ES 的组合拳）</h2>
+<ul class="points"><li>讲法：「2016 到 2019 年我交付了三个云管理平台：北京移动设计院、广东省检察院、洪都航空。云管平台解决的问题是『异构纳管』——客户的数据中心里有虚拟化、私有云、物理机各种资源，各有一套管理界面，云管平台把它们统一纳管：统一申请、统一监控告警、统一运营。洪都航空那个项目是分布式架构的典型：服务间调用用 Dubbox，事件和日志汇集走 Kafka，检索和监控分析走 ElasticSearch——比如多类存储的统一纳管和性能监控分析就是这套组合撑起来的。」</li></ul>
+<div class="qa"><div class="q">追问：为什么这三件套？各解决什么问题？</div>
+<p class="body">「Dubbox 解决服务治理——注册发现、负载均衡、服务间调用有章法；Kafka 解决削峰和解耦——监控数据、操作日志这种写多读少的流，先入队列再落库，上游抖动不影响下游，而且消费端可以并行扩展；ES 解决检索和聚合分析——日志和监控数据的全文检索、多维聚合是关系库做不了的。分工原则：同步调用走 RPC，异步事件走消息，检索分析走搜索引擎——按数据的访问特征放位置。」</p>
+</div>
+<h2 id="sec-7-3">7.3 交付项目（明远、广药、商飞）怎么讲</h2>
+<ul class="points"><li>统一讲法（三句话版）：「近两年的三个重点交付：明远是算力大屏加算力资源管理——首版验收完成度 80%，包括单点登录统一登出、模型平台全业务数据同步、GPU/NPU 按比例虚拟化切分；广药是集团版落地——单点登录、用户同步、文件存储挂载，多轮修复约 40 个缺陷；商飞是技术中台的数据抽取、作业接口和数据库对接，已通过客户验证——那边是完全封闭环境，全程远程支持交付。」</li><li>亮点词：单点登录（一次登录全系统通行，登出也要全系统统一——讲清楚和域控、JWT 的关系）；GPU/NPU 按比例虚拟化切分（一张算力卡切成几份分给不同用户，提高利用率——这是算力平台的核心卖点）；封闭环境交付（客户内网完全隔离，远程支持考验的是日志规范、远程协作流程和一次交付成功率）。</li></ul>
+<h2 id="sec-7-4">7.4 早期经历怎么一句话带过</h2>
+<ul class="points"><li>面试官让你讲早期经历时，每个用一句话概括加一个收获，不恋战：「马士基物流 ERP（Kewill 上海四年）——给我打下了工程规范的底子，大公司的流程、测试文化、国际化代码标准都是在那里养成的；易往信息做 MES（汽车制造执行系统）——江铃、东风二汽的项目让我懂了制造业的现场感和『软件停一分钟产线停一分钟』的可靠性要求；泰豪科技做架构师——第一次把平台级的架构完整做下来。」</li></ul>
+<h2 id="sec-7-5">7.5 准备三个技术难点故事（STAR 模板，背熟）</h2>
+<p class="body">面试官几乎必问『讲一个你解决过的最难的问题』。三个故事按下面准备，讲到哪用哪个：</p>
+<ul class="points"><li>故事一（AI 项目·数据可信）：「背景：系统上线前，业务方最大的质疑是数字不可信——历史上采集失败曾被渲染成 0，管理层以为消耗归零。任务：让每个数字可信。行动：我定了三条机制——四类状态分开呈现（正常、采集异常、数据不完整、未接入），失败绝不兜底成 0；每次采集写审计流水判定新鲜度；过滤条件未下推的数据一律作废标红。结果：上线后业务方敢把大屏数字直接用于经营汇报，质疑从『这数对不对』变成了『为什么是这样』——后者只要点开溯源就能回答。」</li><li>故事二（AI 项目·口径统一）：「背景：同一指标在不同平台单位能差上千倍，人工拼表每次数字对不上。任务：让同一问题谁问都是同一个数。行动：指标的单位、换算系数、可加性固化进指标字典随代码评审；取数统一走语义视图；查询护栏把『比率求和』『无时间条件』这类错误在执行前拦住，拒绝原因喂回模型自修。结果：口径争议归零，新增指标只需登记字典、不改表不改视图。」</li><li>故事三（SkyForm·现场问题定位）：「背景：域控模块客户现场出现 SSL 握手超时，本地无法复现。任务：远程定位。行动：抓包对比握手各阶段的耗时，锁定在证书链验证环节——现场环境缺中间证书；再排查出同类风险：不同版本 AD 字段语义差异、只读权限配置导致的同步中断，一并做成部署检查清单。结果：问题闭环，检查清单进了交付流程，后续项目同类问题归零。」</li></ul>
+<div class="tip">故事的讲法纪律：30 秒背景 + 60 秒行动（细节最密）+ 15 秒结果（带数字）。行动部分多说『我做了什么判断』，少说『我们做了什么』——面试官评估的是你个人的能力。</div>
+<section class="part" id="part-8"><h1>第八部分　HR 面与临场细节</h1></section>
+<h2 id="sec-8-1">8.1 HR 面的核心逻辑</h2>
+<p class="body">HR 面不考技术，考三件事：稳定性（你会不会干两年就走）、协作性（你会不会搞事）、性价比（你的钱和你的产出匹不匹配）。所有回答围绕这三点组织。</p>
+<div class="qa"><div class="q">高频问题：你为什么从上一家离开？（HR 版）</div>
+<p class="body">用第二部分 2.2 的发展版话术，但语气更个人化：「我在那家公司九年，团队是我从 0 带起来的，两个核心产品也都到了稳定期。我做决定的时候跟家里人商量过：45 岁往后，能让我毫不犹豫换环境的理由只有一个——有更好的 AI 落地场景。所以我看机会看得非常聚焦，这也意味着如果入职，我的稳定性您不用担心。」</p>
+</div>
+<div class="qa"><div class="q">高频问题：家人支持你来外地/换城市吗？</div>
+<p class="body">「和家人充分沟通过，家庭这边安排好了。我现居南昌，工作城市不限——简历上写的就是这个。如果岗位在异地，我可以谈具体的到岗和驻地安排。」（如果实际有家庭约束，如实说清可接受的范围，不要含糊，避免offer后谈崩。）</p>
+</div>
+<div class="qa"><div class="q">高频问题：你上一份工作最大的成就？</div>
+<p class="body">「把 AI 驾驶舱从一句话需求做成公司级度量的正式依据。成就感的标志不是技术多难，是业务方现在开经营会直接用我们的数——数字进了决策，系统才算活着。」</p>
+</div>
+<div class="qa"><div class="q">高频问题：你抗压能力怎么样？</div>
+<p class="body">「我抗压的方式是拆解：压力来自不确定，把大目标拆成一周一个里程碑，压力就变成日程表。9 年里上线前连轴的节点很多，我的习惯是关键节点自己守在一线——这不叫牺牲精神，叫管理者应该在信息最全的地方。」</p>
+</div>
+<h2 id="sec-8-2">8.2 反问环节：问什么最加分</h2>
+<p class="body">反问环节不是走过场，是最后一次展示你思考层次的机会。准备 5 个，现场挑 2~3 个问：</p>
+<ul class="points"><li>问业务（体现你在乎事）：「这个岗位当前最紧迫要解决的一两个问题是什么？」——对方的回答直接决定这个岗位值不值得去。</li><li>问 AI 布局（贴合你的定位）：「公司现在 AI 应用走到哪一步了——是平台建设期还是业务落地期？团队里 AI 这块有多少人？」</li><li>问协作机制（技术经理岗位必问）：「技术团队和产品、业务的协作方式是怎样的？需求是怎么排优先级的？」</li><li>问成长（体现长期意愿）：「这个岗位做得出色的人，一年后公司期望他达到什么状态？」</li><li>问流程（观察团队成熟度）：「上线流程和代码评审是怎么做的？有没有事故复盘机制？」</li></ul>
+<div class="tip">不要一上来问薪资福利细节（HR 面自然会谈）；不要直接问『加班多吗』，想了解可以问「团队目前的工作节奏是怎样的」——更委婉且信息量一样；不要说『没什么想问的』。</div>
+<h2 id="sec-8-3">8.3 面试前 30 分钟速记卡（附录）</h2>
+<div class="tablewrap"><table><thead><tr><th>模块</th><th>必须记得的关键词</th></tr></thead><tbody><tr><td data-label="模块">自我介绍三句</td><td data-label="必须记得的关键词">18 年 / 10 年 Java / 近两年 AI Agent；驾驶舱主导者；架构 + 编码 + 带队三合一</td></tr><tr><td data-label="模块">驾驶舱数字</td><td data-label="必须记得的关键词">5 屏 82 卡 34 层；4 图 9 技能；20 表 23 视图；自修 2 次；洞察 20 轮 1000 查 5000 万 Token</td></tr><tr><td data-label="模块">三条设计原则</td><td data-label="必须记得的关键词">错的数字比查不到更危险；口径在代码不在提示词；约束靠机制不靠自觉</td></tr><tr><td data-label="模块">核心范式</td><td data-label="必须记得的关键词">AI 决定、代码保证；模型点菜厨房炒菜；固化后零模型调用</td></tr><tr><td data-label="模块">六护栏</td><td data-label="必须记得的关键词">只读 / 白名单 / 防个人信息 / 时间必填 / 比率禁求和 / 强制行数上限</td></tr><tr><td data-label="模块">记忆要点</td><td data-label="必须记得的关键词">短期 6 轮消息表重建（不用内存检查点，多实例）；长期 5 类、事实 90 天；记忆不碰权限和数字</td></tr><tr><td data-label="模块">RAG 缺口答法</td><td data-label="必须记得的关键词">承认没有 → 讲清是什么（开卷考试）→ 讲清补法（Milvus + BGE + 重排 + 检索工具）</td></tr><tr><td data-label="模块">Java 必保题</td><td data-label="必须记得的关键词">HashMap 原理；线程池七参数顺序；事务失效场景；索引失效场景；Kafka 不丢消息三端</td></tr><tr><td data-label="模块">高并发四件套</td><td data-label="必须记得的关键词">限流（令牌桶）/ 熔断（三态）/ 隔离（舱壁）/ 降级；三板斧：缓存、异步、水平扩展</td></tr><tr><td data-label="模块">分布式口诀</td><td data-label="必须记得的关键词">最终一致 + 对账兜底；超时、退避重试、幂等三件套；秒杀 = 挡在库外 + 异步 + 幂等</td></tr><tr><td data-label="模块">智能体原理五件套</td><td data-label="必须记得的关键词">感知 / 记忆 / 规划 / 工具 / 反思——各自补模型哪个短板；ReAct 与 Plan-and-Execute 按确定性选</td></tr><tr><td data-label="模块">垂直智能体六步</td><td data-label="必须记得的关键词">知识建模 → 工具面 → 约束体系 → 评测基准 → 人机边界 → 迭代运营；变内容不变架构</td></tr><tr><td data-label="模块">管理主线</td><td data-label="必须记得的关键词">六步流程；拆到半天粒度；延期当天摊牌带选项；机器检查代替自觉</td></tr><tr><td data-label="模块">大厂管理对照</td><td data-label="必须记得的关键词">OKR 骨架 + KPI 纪律；Scrum 四仪式；DORA 四指标；六页备忘录；1:1 与校准</td></tr><tr><td data-label="模块">管理 BQ 一稿多用</td><td data-label="必须记得的关键词">M1 进度危机 / M2 质量机制 / M3 培养新人——每题先点题再进故事；R 必须有数字</td></tr><tr><td data-label="模块">模拟问答用法</td><td data-label="必须记得的关键词">第九部分遮答案出声练：技术题结论先行、行为题 A 占一半、高压题三段式（稳住→事实→方案）</td></tr><tr><td data-label="模块">离职原因</td><td data-label="必须记得的关键词">九年一役打完，寻求更大 AI 场景；不说旧主坏话；口径全程一致</td></tr><tr><td data-label="模块">薪资</td><td data-label="必须记得的关键词">报年度总包；先探岗位再报价；职级和场景可以换弹性</td></tr><tr><td data-label="模块">反问</td><td data-label="必须记得的关键词">岗位最紧迫的问题 / AI 布局阶段 / 协作机制</td></tr></tbody></table></div>
+<h2 id="sec-8-4">8.4 临场注意事项</h2>
+<ul class="points"><li>线上面试：提前 15 分钟测试摄像头麦克风；背景整洁；看摄像头而不是看屏幕（对方觉得你在看他）；准备一杯水，回答长问题前喝一小口争取思考时间。</li><li>线下面试：提前一天确认路线，提前 10 分钟到；带纸质简历两份和笔记本；白板题先画框架再填细节，边画边讲。</li><li>所有面试通用：听完问题再答，没听清就确认（『您问的是 A 还是 B』——这反而是加分项）；答不上来就诚实加思路，绝不懂装懂；全程围绕真实项目，编造的经历追问两层必穿帮；结束时报以明确的意愿——「今天聊完我对这个岗位的意愿更强了，期待后续」。</li><li>心态：你是带着 18 年功底和一套真实上线的产品来面试的，你是被挑选者也是挑选者。紧张的本质是把面试当成考试——把它当成一次双向的技术交流，你的发挥会好得多。</li></ul>
+<section class="part" id="part-9"><h1>第九部分　全真模拟问答：面试官问、你直接答</h1></section>
+<h2 id="sec-9-1">9.0 这一章怎么用（先读这个）</h2>
+<p class="body">前面八章是『弹药库』，这一章是『靶场』——按真实面试的顺序，把面试官最可能问的话原样写出来，答案写成你可以直接说出口的口语版本。用法照行为面试训练的标准来：</p>
+<ul class="points"><li>用法：找人或对着墙模拟。面试官念题（或自己看题），先遮住答案，出声回答——一定要出声，默念和开口是两种能力；答完再看参考答案对照，差异大的题标注重练。</li><li>三条纪律：技术题结论先行——先给答案再给理由，别铺垫；行为题用 STAR 配比——背景两句带过，『我做了什么』占一半时间，结果必须有数字；一稿多用——同一个故事换开场和落点就能打多道题，别试图背几十个答案。</li><li>答案长度：短题 30~60 秒，深题 60~90 秒，项目介绍 2~3 分钟。参考答案里「」内的话就是建议你说出口的内容。</li></ul>
+<p class="body">下面共四场面试加一节高压应对：AI Agent 技术面（12 问）、Java 高级面（12 问）、技术经理管理面（10 问）、HR 面（6 问）、高压与意外场景（6 例）。每场结尾有考官视角点评，告诉你这场面试官真正在打什么分。</p>
+<h2 id="sec-9-2">9.1 模拟第一场：AI Agent 开发岗技术面</h2>
+<div class="qa"><div class="q">面试官：「别念简历。先聊聊你这个 AI 项目——它到底解决什么问题？假定我是外行。」</div>
+<p class="body">「好。背景是公司有 9 个 AI 平台，每个平台自己一个控制台、自己一套算法，管理层想知道『这个月 AI 花了多少钱、用在哪、好不好用』，居然没人答得上来。更麻烦的是出错的时候——采集失败界面上显示 0，领导以为这个月没花钱，这比报错危险得多。我带着一个 2 人小组，从数据底座做到智能体层：底下是 Doris 里 20 张业务表、23 个语义视图；中间 4 张流程图，撑起 5 块固定大屏、82 张卡片、34 层下钻；上面是 AI 问答和 AI 造屏，业务同事说一句话就能拿到数，不用等写 SQL。上线之后它成了公司 AI 投入度量的正式依据——数字进了经营会议，这才算真的活了。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「为什么不让大模型直接写 SQL？很多团队都这么干，省事。」</div>
+<p class="body">「我们评估过，三个问题过不去。一是口径不稳：同一个问题今天问明天问两个数，因为口径藏在模型的每次生成里，没法版本管理、没法评审。二是安全：模型能看见底层表，就可能碰到敏感数据，或者写个没有时间条件的全表扫描把库拖死。三是不可审计：数字错了说不清怎么来的，没人敢为它签字。所以我们的原则是『模型点菜、厨房炒菜』——模型只对着语义视图目录选视图、填一份查询计划；计划里只许 5 种聚合函数、不许 JOIN、所有值参数化；校验和执行全部是代码。它也不是没自由度：有 5 个只读的元数据工具让它看菜单，计划被护栏拒绝时把原因喂回去，它自己改，最多两次。」</p>
+</div>
+<div class="qa"><div class="q">面试官（追问）：「那准确性怎么保证？它选错视图呢？」</div>
+<p class="body">「四道保险。语义视图本身把列名翻译成业务语言，选对率天然高；取数前允许它先查元数据再定计划；执行前每张卡先试跑一遍，有没有数、新不新鲜，用户确认之前就知道；执行后还有检查节点，行数异常会在结论里说明。真到自修两次还不行，就把失败原因如实返回——宁可让用户换个问法，绝不编一个数出来。」</p>
+</div>
+<div class="qa"><div class="q">面试官（再追问）：「那为什么不微调一个专门写 SQL 的模型？」</div>
+<p class="body">「算过账。微调要标注数据、训练资源、持续迭代，对 2 人小组不现实；更关键的是，取数场景要的是口径一致，这靠约束机制保证，不靠模型能力——微调解决不了『两次提问同一个数』的问题。所以功夫花在语义层和护栏上，模型本身是可替换的：我们实际换过模型，改配置就行。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「你说 4 张 LangGraph 图，具体一张图怎么设计的？状态怎么管？」</div>
+<p class="body">「拿问答图说：加载上下文、判断意图、探索视图、生成计划、校验、执行、检查、给结论、出图，每步一个节点，分支用条件边显式声明。状态两个关键设计：执行轨迹是追加式的，每走一步记一笔，整条链可回放；数据库连接这类活对象不进状态，构建图时用闭包绑进去，节点全是纯函数，单测好写。还有一个我们刻意做的决定：不挂框架自带的检查点——多实例部署下它存内存，用户这轮在 A 实例、下轮在 B 实例，会时好时坏地失忆。跨请求上下文我们一律从 MySQL 消息表重建，可靠、可查、可运维。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「记忆这块具体怎么做的？」</div>
+<p class="body">「两层。短期是便签本：最近 6 轮对话，每次请求从消息表重建。长期是记事本：回答成功后异步提炼，存 5 种类型——偏好、习惯、关注点、事实、纠正，事实类保存 90 天；同一主题新记忆顶掉旧的，用户手动设的不被自动覆盖，每次召回 10 到 20 条拼进提示词。有一条权力边界我们卡得死：记忆只能影响默认时间窗和说话风格，绝不影响权限、口径、数字——AI 可以记住用户爱看周报，但不能因为记住什么就给没有权限的数。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「你们知识这块没做 RAG？现在哪个 Agent 不上 RAG？」</div>
+<p class="body">「是，这是目前最大的缺口，我直说。但它是场景决定的：我们的知识是结构化的——指标口径、视图目录，用语义目录加指标字典管，比向量检索的『大概像』精确得多，取数要的是确定不是相似。但边界我清楚：一旦涉及非结构化知识——产品手册、故障案例——没有 RAG 就是死路。所以工业迁移方案里 RAG 排第一优先级，选型已经到细节：Milvus 做向量库、BGE 做中文向量化、加重排模型，文档按章节切块，工具层加一个检索工具给模型调。要上，两三个月能落地。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「怎么证明你的 AI 答的是对的？」</div>
+<p class="body">「三层。事前——每张卡试执行，有没有数先告诉用户；事中——全程事件流，它理解成什么、选了哪个视图、生成了什么查询，用户看得见；事后——每个数字能下钻到明细、有口径说明。再叠加一条底线：口径唯一，同一句话谁问都是同一个数。我的经验是，企业场景里『可解释』比『准确率』更优先——可解释的错误能改，不可解释的正确没人敢用。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「大模型调用很贵，成本你们怎么控？」</div>
+<p class="body">「七个手段：固定大屏零模型调用，八成日常流量根本不进模型；双模型分工，分类和格式抽取用便宜的小模型；技能命中先用关键词正则预筛，零 Token；模型调用信号量限并发 2；异常洞察每次 5000 万 Token 硬上限；造屏确认后固化，之后渲染零调用；上下文精打细算，只放 6 轮对话加 20 条记忆。一句话总结：Token 就是钱，每一段提示词都要问值不值。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「场景题。让你从零给法务部门做一个合同审查智能体，你怎么开始？」</div>
+<p class="body">「我有一套六步法，换任何领域都一样。第一步知识建模：把领域知识分两类——能写成规则的，比如必填条款、限额红线、格式规范，固化成规则引擎和字典，走代码评审；写不成规则的，比如判例和审查惯例，建 RAG 库检索。第二步工具面：条款比对、台账查询这类工具，全部只读、参数受约束、调用可见。第三步约束体系：法务的红线是『不能给错结论』，所以定位是风险提示给律师复核，不是替人签字。第四步评测：先和法务同事攒 50 到 100 条真实合同的评测集，之后每次改动都跑回归。第五步人机边界：AI 标风险、人拍板。第六步迭代运营：线上坏例回流评测集。骨架和我的数据分析驾驶舱完全一样——变的是知识和工具，不变的是架构。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「假设有一天 AI 算错一个数，业务方在总办会上被领导质疑，你怎么办？」</div>
+<p class="body">「三步。先应急：几分钟内定位是数据问题还是口径理解问题——我们把成功、空、失败、未接入分开呈现，还有采集流水和逐级溯源，错误藏不住也跑不远。再补救：确实错了就修正数据，主动同步受影响的人和影响的时间窗。最后根因：复盘是采集、加工还是查询的问题，把这类错误在机制上堵死。可以补一句：上线至今没出现过『数字进了决策才发现是错的』——溯源和状态明示让大多数错误活不到那一步。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「现在都在讲多 Agent，你们为什么是四张图，不是一堆 Agent？」</div>
+<p class="body">「我的原则：单 Agent 加好工具能解决的，绝不上多 Agent——多 Agent 的通信成本和排障复杂度是真实的。真正需要多 Agent 的信号是三个：单上下文装不下、职责权限要隔离、任务可并行。我们的四张图是轻量分工：共享基础设施、各自独立预算和降级。工业方案里我设计的是主管式：协调 Agent 走自由探索，但只许调度专家 Agent、不许直接碰底层工具——权限隔离做到 Agent 这一层。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「2 个人做出 82 张卡片、5 块大屏？说实话，我怎么信这个体量。」</div>
+<p class="body">「三个杠杆，都经得起查证。一是架构替人干活：护栏和语义层把大量边界情况在机制上消灭，不需要人肉兜底；二是工具提效：我们重度使用 AI 编程工具，脚手架、单测、文档都是生成的，人只写核心逻辑；三是克制：只自研差异化的语义层、护栏和工具体系，流程框架、数据库、前端全是成熟开源。另外，编的经历经不起追问两层——我这套系统任何模块您都可以往深里问四层，从架构问到代码级细节。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「好，你有什么想问我的？」</div>
+<p class="body">「两个问题。第一，这个岗位现在最紧迫要解决的一两个问题是什么？我想判断我的经验能不能直接对上。第二，团队现在的 AI 应用走到哪一步了——平台建设期还是业务落地期？这两个阶段的打法完全不同，我想听您讲讲。」</p>
+</div>
+<div class="tip">考官在测什么：这场面的核心评分点是『约束大模型的工程化思维』——你能不能讲清『自由给多少、约束在哪、出了错怎么兜』。2 个 2 人的体量质疑和 RAG 缺口是两道压力题，答法都是同一个模板：坦承 + 证据 + 方案，不辩解。</div>
+<h2 id="sec-9-3">9.2 模拟第二场：Java 高级开发岗技术面</h2>
+<div class="qa"><div class="q">面试官：「讲一个你做过的最有技术含量的项目。」</div>
+<p class="body">「洪都航空的行业云平台。痛点是客户数据中心里虚拟化、私有云、物理机各有一套管理界面，运维要来回切，故障定位全靠人肉比对。我们做统一纳管：架构上服务间调用走 Dubbox，事件和监控数据走 Kafka 削峰解耦，检索分析走 ElasticSearch——多类存储的纳管和性能监控分析是这套组合撑起来的。我负责架构和核心模块，最难的是异构资源的统一建模：不同源的属性和生命周期完全不同，我们抽象了一层资源模型加适配器，新接一种资源只写适配器、不动主流程。这个项目给我留下一个习惯：按数据特征放位置——同步调用走 RPC，异步事件走消息，检索分析走搜索引擎。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「现场题：周一早上，一个核心接口从 200 毫秒涨到 2 秒，业务还在跑，你怎么排查？」</div>
+<p class="body">「先止血再找根因。第一步定范围：链路追踪看是我这个服务慢还是下游依赖慢，是全量慢还是部分慢，昨晚有没有发布、流量有没有变化。第二步分资源：CPU 高还是 IO 等待高，GC 是不是变频繁，连接池有没有打满，慢查询日志有没有新面孔。第三步按概率排三类原因：新上线的慢 SQL 看执行计划是不是选错索引；下游抖动看超时和熔断有没有兜住；缓存失效看命中率曲线是不是掉下来了。第四步处置：能回滚先回滚、能降级先降级，不在高峰期调参数。事后复盘补监控盲区——这次为什么是业务先发现而不是告警先发现，这个问题必须回答。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「设计题：电商下单，库存绝对不能超卖，怎么设计？」</div>
+<p class="body">「两层。正确性底座在数据库：条件更新——update 库存表 set 数量 = 数量 - 1 where 商品 = ? and 数量 &gt;= 1，靠行锁加条件保证绝不超卖，这一条就够正确。高并发在前面加 Redis 预扣：库存预热进 Redis，原子递减，扣到负数直接拒绝，挡掉绝大多数无效流量；预扣成功的发消息队列异步建单，数据库层再做一次条件更新兜底。两个坑要处理：预扣后不支付的，用延迟消息自动关单、回补库存；Redis 和库之间靠最终一致加对账任务兜底。」</p>
+</div>
+<div class="qa"><div class="q">面试官（追问）：「Redis 挂了呢？」</div>
+<p class="body">「降级路径是直接打数据库条件更新，同时网关限流保护——宁可少卖，不能超卖。这类系统的底线原则是：一致性错误是不可逆事故，少卖只是收入损失，两害相权取其轻。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「订单服务和支付服务是两个库，怎么保证一致性？」</div>
+<p class="body">「九成场景我选最终一致，方案是本地消息表：订单落库和待发送消息在同一个数据库事务里写入，要么都有要么都没有；后台任务把消息投给支付服务，成功改状态，失败重试；支付侧用订单号做幂等键，重复消息不重复处理；再加定时对账兜底。为什么不用强一致框架：同步阻塞、性能代价大，我们这类业务晚一秒一致完全可接受。反过来，资金过账这种强一致场景我会换 TCC——预留、确认、取消，业务侵入大但正确。选型跟场景走，没有万能药。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「Kafka 积压了一千万条消息消费不过来，怎么办？」</div>
+<p class="body">「先定位再动手。看消费端为什么慢：单条处理慢就批量拉取批量处理；逻辑里有外部调用就异步化；分区数允许就加消费者实例扩并行，分区不够先扩分区。看是不是消费者反复重平衡：心跳和会话超时配得不对会来回踢人、进度清零。紧急情况两条腿：临时扩容加消费，同时评估消息能不能按业务跳过——过期的监控类消息直接按位移跳。防复发：生产端限流、消费容量规划、积压告警提前。前提是消费端幂等——扩容和跳过都可能带来重复消费。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「一条本来很快的 SQL 突然全表扫描了，什么原因？」</div>
+<p class="body">「explain 看执行计划，重点看访问类型是不是退化成全表、索引有没有被选中。常见原因按概率排：统计信息过期导致优化器选错索引，更新统计即可；隐式类型转换——字符串列传了数字，索引直接失效；对索引列用了函数或运算；数据量跨过阈值，优化器判断走全表更划算。处置：应急用强制索引，根治是改写 SQL 消除失效条件或者建更合适的联合索引。长期靠上线前的 SQL 审核，别靠救火。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「线上服务 OOM 了，怎么排查？」</div>
+<p class="body">「先保服务再分析：抓一份堆快照，然后重启实例恢复流量。拿快照看两件事：占比最大的对象是什么类型，支配树里是谁持有引用。常见元凶四类：静态集合只进不出、缓存没有上限、线程池队列无界、大结果集一次读入。定位到类之后补上限或者改流式。补一句预防：容器环境要配置堆和容器内存的关系——元空间和堆外内存超限那种 OOM，堆转储里是看不到的。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「系统设计题：公司要一个监控大屏系统，你怎么设计？」</div>
+<p class="body">「这正好是我做过的系统，我按真实设计讲。先澄清：给谁看？管理层要稳定秒开，分析师要灵活查询——两条路径分开设计。采集层：统一小时粒度、幂等主键可重跑、失败留空标记绝不补 0。存储层：分析库存指标明细，窄表加唯一键模型支持覆盖重算；权限配置放关系库——两个库分开，因为一个要大范围聚合、一个要高频小事务，访问模式互不相容。口径层是灵魂：指标字典固化单位和可加性，对外只暴露语义视图，查询护栏统一约束——比率求和这种错误在结构上写不出来。服务层配置驱动、无状态多实例。展示层固定大屏秒开、逐层下钻到明细。最后讲演进：新数据源接入是固定六步，不改模型——这类系统的寿命，取决于接第 N 个系统时成本还是不是常数。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「基础确认：HashMap 在并发下会出什么问题？」</div>
+<p class="body">「分版本。1.7 头插法扩容会成环，get 死循环 CPU 打满；1.8 改尾插修了成环，但并发 put 仍然会丢数据。所以并发场景用 ConcurrentHashMap：1.8 直接锁桶的头节点，锁粒度细、读基本无锁，计数用分片累加。实践上一句话：别用 Hashtable 和同步包装器，直接 CHM。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「线程池参数你怎么定？」</div>
+<p class="body">「方向按任务类型：CPU 密集型接近核数，IO 密集型可以到核数的两倍或按等待计算比估算——但公式只是起点，必须压测定参。比参数更重要的是几条纪律：手动创建线程池不用快捷工厂——无界队列会内存溢出、缓存线程池会线程失控；队列必须有界；拒绝策略按业务选，核心任务落库重试而不是静默丢弃；线程起有意义的名字方便排查；监控队列水位。顺带说：我们 AI 系统里模型调用是信号量限并发 2——同一个资源隔离思想，粒度更细。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「缓存和数据库的一致性，你的方案？」</div>
+<p class="body">「主流是旁路缓存：读——先缓存后数据库，回填；写——先更新数据库，再删除缓存。为什么删除不是更新：并发写会互相覆盖，而且写多读少时更新是浪费。为什么先库后删：顺序反了，读写并发下会把旧值重新缓存回去。残余的不一致窗口用过期时间兜底，要求高的场景加延迟双删。最后一句实话：真要强一致就别用缓存——缓存本身就是拿一致性换性能。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「行，你有什么想问我的？」</div>
+<p class="body">「我问两个：第一，团队现在的技术栈和架构里，您觉得最需要改进的一处是什么？第二，这个岗位进来后，前三个月您期望他先拿下什么事情？」</p>
+</div>
+<div class="tip">考官在测什么：技术面的评分点是『排查题有没有章法、设计题有没有取舍、追问四层还稳不稳』。所有现场题的万能开场是先澄清约束（量级、一致性要求、能不能改架构），最后收口都要落一句权衡——高级和初级的分界线就是会不会讲代价。</div>
+<h2 id="sec-9-4">9.3 模拟第三场：技术经理岗管理面</h2>
+<div class="qa"><div class="q">面试官：「讲讲你怎么带团队。别讲理念，讲实际的跑法。」</div>
+<p class="body">「7 个人，3 后端、2 前端、2 测试。节奏固定六步：需求评审定『做什么、验收标准是什么』，没有验收标准的需求不进排期；技术方案评审定『怎么做』，模块间接口先冻结；拆解排期到半天粒度，认领到人，留两成缓冲；开发期每天 15 分钟站会，只说三件事——昨天做完什么、今天做什么、卡在哪；代码过评审才合入；上线一周内复盘，改进项进下一轮。我的原则是标准进流程、不靠人盯人：规范做成机器检查，人的注意力只花在机器看不懂的设计问题上。对结果我每周对里程碑，偏差超过一成当周调整——绝不憋到最后一周才摊牌。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「讲一次项目要延期的经历，你怎么处理的？」</div>
+<p class="body">「SkyForm 项目群并行交付，客户验收日期锁死，中途插进来一批变更。我是技术经理，对日期和质量负责。我做了三件事：当天向干系人摊牌，绝不拖到最后一刻；给出带选项的方案——砍范围保日期、加资源、调日期，每个选项附上代价分析；客户选了砍范围，次要功能挪到二期，核心功能按期交付。事后把『变更必须过评估』写进需求评审的卡点。结果：按期通过验收，后续约 40 个缺陷的修复也闭环在验收窗口里。」</p>
+</div>
+<div class="qa"><div class="q">面试官（追问）：「客户不同意砍范围呢？」</div>
+<p class="body">「那就把选择权还给事实：我把每个功能的工作量和风险摆成表，让客户自己排优先级——多数『全都要』看到成本表之后会自己砍。真的都要，就谈加资源和顺延日期，白纸黑字确认。最差的做法是含糊地接下来再偷偷延期——事没干好还丢了信任，双输。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「团队里有人绩效不行，你怎么办？」</div>
+<p class="body">「先诊断再动手，一对一搞清楚是能力、意愿还是环境：能力不行就结对带，给清晰的小目标和及时反馈；意愿问题聊他的诉求，岗位不匹配调岗；流程问题——需求不清、老被打断——改流程，不冤枉人。然后给明确的改进期和改进标准，到期没达标按制度处理。拖着不处理对双方都是伤害：对优秀成员不公平，标准一松管理信用就没了。」</p>
+</div>
+<div class="qa"><div class="q">面试官（追问）：「如果他是功勋老员工呢？」</div>
+<p class="body">「功勋归功勋，标准归标准，两本账分开。谈的时候先认可历史贡献，再摆当前岗位的要求和差距，给他体面的出口——转去匹配的岗位，或者以导师身份发挥别的作用。因为情面拖着不动是最差解：团队都在看着，这关你放水，后面所有标准都软了。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「和产品经理吵过架吗？来个具体的。」</div>
+<p class="body">「常吵，健康的吵。我的原则：吵『要不要做』可以，吵完必须落结论。具体做法是把争论从『做不做』变成『做到什么程度』——我给完整版、简化版、不做三个方案，各带成本和风险让他选。有一次一个功能按原方案要三周，简化版五天覆盖八成价值，产品选了简化版，剩余的放二期。对着价值吵，不对着情绪吵——这是好吵架和坏吵架的分界线。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「讲一个你做错的决定。」</div>
+<p class="body">「早期带团队我把关太细，代码恨不得逐行看。结果团队长不大，有位骨干直接跟我说『这个模块干脆你来做』。这句话点醒了我。后来我把标准写进流程——评审清单、机器检查、口径变更随代码评审，人只审关键节点，执行交给流程。之后团队自转能力明显变强，我才有精力去主导 AI 驾驶舱这种新东西。这个错误让我确信：管理者的产出是团队的产出，不是自己写了多少代码。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「说实话，你没有大厂经历，怎么管大团队的复杂度？」</div>
+<p class="body">「分两层。方法论我不缺：OKR、Scrum 仪式、DORA 效能指标、校准和一对一，这些被验证的方法我研究过，也在自己团队裁剪着用——比如 OKR 的骨架加 KPI 的纪律，双周对齐，效果不错。经验上我确实没管过百人团队，这是事实；但我要补的是适应期不是学习期——流程、工具、层级都是现成的，新的主要是跨团队协作网络。还有一个更根本的判断：大团队是由小团队组成的，把一个 7 人团队管成不依赖任何单个人的自转组织，这个能力是通用的——我做到了，而且有系统还在跑为证。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「再挑战一下：流程和评审越多，速度越慢。你不怕吗？」</div>
+<p class="body">「这个前提对一半：加错地方的流程确实慢。所以我做的是流程做减法、机制做加法——仪式能合并就合并，文档能薄就薄；但机器检查只增不减，因为自动检查是零摩擦的质量。再算一笔账：需求评审卡验收标准、接口先冻结，看着慢，实际省的是联调返工和上线救火——返工才是最大的慢。事实是六步流程一步没省，AI 驾驶舱 2 个人一年上线——流程没有拖住速度，护栏反而在保护速度。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「核心成员突然离职，你的团队会不会停摆？」</div>
+<p class="body">「我的目标是任何节点都不依赖单个人。三个机制：关键模块必须有文档和备份人，代码评审本身就是知识扩散；知识在流程里——口径、规范、检查都在代码和配置里，不锁在人脑里；排期留缓冲，人走不崩盘。真发生时：交接按清单走，离职期结对运行一段时间，交接质量当交付来验收。事实是，我离开原团队时就是按清单交接的，系统到现在照常在跑。」</p>
+</div>
+<div class="qa"><div class="q">面试官：「好，你有什么想问我的？」</div>
+<p class="body">「三个问题挑两个问：这个团队现在最大的痛点是什么？公司和我未来一年对这个岗位的期望是什么？团队目前的需求优先级是怎么决定的——我需要知道决策链长什么样。」</p>
+</div>
+<div class="tip">考官在测什么：管理面的评分点是『出事时的第一反应』——延期、绩效、冲突这些题，面试官听的是你先人还是先事、有没有标准、敢不敢处理。两道挑战题（没大厂背景、流程拖速度）千万不能辩解或慌乱，模板都是：承认事实 + 给方法论 + 用结果收尾。</div>
+<h2 id="sec-9-5">9.4 模拟第四场：HR 面</h2>
+<div class="qa"><div class="q">HR：「为什么这个时候离开上一家公司？」</div>
+<p class="body">「我在那家公司九年，南昌的研发团队是我从零搭起来的，SkyForm 和 AI 驾驶舱两个核心产品也都到了稳定交付的阶段——该打的仗打完了。正好协商解除的节点和我自己的规划重合：我想把 AI Agent 这条线在更大的场景里继续做深。所以我看机会非常聚焦，只看 AI 落地场景——反过来说，入职之后我的稳定性您不用担心。」</p>
+</div>
+<div class="qa"><div class="q">HR：「你 44 岁了，还在写代码，怎么看这个问题？」</div>
+<p class="body">「我觉得年龄是筛选器，筛掉的是停止学习的人。我最近两年做的 AI 驾驶舱，用的技术全是这两三年才成熟的，我是带着十年 Java 功底现学的，一年做出了公司级上线产品。体力确实没法跟二十五岁比，但我有三样东西是岁月给的：踩坑经验——很多问题我一眼知道坑在哪；成本意识——知道什么该做精、什么该买；确定性——我交付的系统都还活着。」</p>
+</div>
+<div class="qa"><div class="q">HR：「你的期望薪资？我们预算有限。」</div>
+<p class="body">「我的年度总包目前是【填写：当前总包】，期望在合理增长范围内谈，具体区间是【填写：期望区间】。如果预算确实有压力，我可以聊职级和场景的交换——岗位能让我继续主导 AI 方向，钱上有弹性。反过来，如果只是普通开发岗，那我的报价就是我对市场的判断。」</p>
+</div>
+<div class="qa"><div class="q">HR：「多久能到岗？手上还有别的机会吗？」</div>
+<p class="body">「离职交接在办，一个月内可以到岗，日期配合公司安排。在看机会的过程中有几家在聊，都在 AI 方向，但我优先看场景和团队，不是谁多两三千——这也是我今天坐在这里的原因。」</p>
+</div>
+<div class="qa"><div class="q">HR：「能接受加班和出差吗？家里支持吗？」</div>
+<p class="body">「项目关键节点我从不缺位，上线前连轴的事干过很多回。但日常我更相信效率——我用 AI 工具把重复劳动压掉，能八小时做完的不拖到晚上十点。出差没问题，常年做行业客户交付，封闭环境驻场都干过。家里对换工作充分支持，安排都做好了。」</p>
+</div>
+<div class="qa"><div class="q">HR：「最后，你有什么想问我的吗？」</div>
+<p class="body">「问一个：这个岗位是新增的还是接替的？如果是接替，前任去了哪里、为什么会空出来？——我想判断岗位的真实处境。另外想了解一下后续的面试流程和大概的时间安排，我这边好配合。」</p>
+</div>
+<div class="tip">考官在测什么：HR 面就测三件事——稳定性、协作性、性价比。所有回答往这三点上收：离职原因体现『主动选择所以稳定』；加班和团队话题体现『能合作不刺头』；薪资体现『有依据、可谈、不虚』。口径必须与技术面完全一致。</div>
+<h2 id="sec-9-6">9.5 高压与意外场景：六种难堪时刻的标准接法</h2>
+<div class="qa"><div class="q">场景一：面试官当面质疑你的项目——「你说的这些数字，我怎么知道是不是编的？」</div>
+<p class="body">「您应该质疑，换我我也会问。我可以往深里讲：您随便挑一个模块——查询护栏怎么实现的、自修预算怎么分配、Doris 表结构为什么这么设计——我能从架构讲到字段级。另外项目是上线运行的，不是我一个人说出来的，如果您方便做背景调查或者技术复测，我完全配合。」——要点：不辩解、不激动，用『可追问深度』和『可验证性』回应。</p>
+</div>
+<div class="qa"><div class="q">场景二：被问到完全没用过的技术——「你们怎么不用 LangChain？/ 没用过 K8s 吧？」</div>
+<p class="body">「这个我没在生产里实际用过，不装懂。我理解它的定位是……（用 30 秒讲你知道的原理或和它同类的东西）；如果岗位需要，我的上手周期是以周计的——LangGraph 我就是从零学到生产级，有先例。」——要点：诚实 + 相邻知识 + 学习速度证据，三段缺一不可。</p>
+</div>
+<div class="qa"><div class="q">场景三：面试官打断你：「说重点。」</div>
+<p class="body">「好，我直接说结论——（一句话结论），原因是两点：（分点，各一句）。需要细节我随时展开。」——要点：被打断不委屈、不慌，立刻切换成结论先行模式；他不是嫌你内容差，是嫌你结构差。</p>
+</div>
+<div class="qa"><div class="q">场景四：被追问隐私——「你离职赔偿拿了多少？」</div>
+<p class="body">「具体数字是我和前公司之间的私密信息，不方便透露，请您理解。我能确认的是：离职是协商一致、手续干净、没有竞业或纠纷遗留，不影响入职。」——要点： boundary 清晰但态度友好，绝不支支吾吾。</p>
+</div>
+<div class="qa"><div class="q">场景五：面试官听完你的回答，沉默不语，也不给反馈。</div>
+<p class="body">「我这个回答里，哪部分您希望我展开？或者方向跑偏了，您可以直接指——我调整。」——要点：冷场多数是在测你的抗压和主动性。主动把对话接住，比干坐着强一百倍。</p>
+</div>
+<div class="qa"><div class="q">场景六：白板手写代码，脑子一片空白。</div>
+<p class="body">「我先说思路，边写边讲：这道题本质是……（讲清输入输出和核心逻辑），我按这个思路写，您随时打断我。」——要点：手写代码考的从来不是默写，是思路外化。宁可写得慢，不可沉默写；卡住了就把卡点说出来——『这里我在纠结 A 还是 B，A 的问题是……』——说出来的思考过程本身就是得分项。</p>
+</div>
+<div class="tip">高压场景的共同心法：面试官施压时，他评的不是你知道多少，而是你在压力下的样子——这直接预测你在客户现场、上线事故时的样子。所有高压接法的模板都是三段：稳住情绪（不辩解不慌）→ 给事实 → 给方案或边界。平时可以对着镜子把 9.5 这六段练到脱口而出。</div>
+
+</main>
+<footer>面试准备手册 · 刘苇 —— 本页面为个人复习用途 · 内容与 Word 版《刘苇-面试准备手册.docx》一致</footer>
+<button id="totop" aria-label="回到顶部">↑</button>
+
+<script>
+const $=(s)=>document.querySelector(s);
+// 目录抽屉
+$("#menuBtn").addEventListener("click",()=>document.body.classList.add("nav-open"));
+$("#mask").addEventListener("click",()=>document.body.classList.remove("nav-open"));
+document.querySelectorAll(".nav-item").forEach(a=>a.addEventListener("click",()=>document.body.classList.remove("nav-open")));
+// 进度条与回顶按钮
+const bar=document.querySelector("#progress i"), toTop=document.getElementById("totop");
+addEventListener("scroll",()=>{
+  const h=document.documentElement;
+  const p=h.scrollTop/(h.scrollHeight-h.clientHeight);
+  bar.style.width=(p*100).toFixed(2)+"%";
+  toTop.classList.toggle("show",h.scrollTop>600);
+},{passive:true});
+toTop.addEventListener("click",()=>scrollTo({top:0,behavior:"smooth"}));
+// 字号调节（记忆到本地）
+let fs=parseInt(localStorage.getItem("fs")||"16",10);
+const apply=()=>{document.documentElement.style.setProperty("--fs",fs+"px");localStorage.setItem("fs",fs);};
+document.getElementById("fsPlus").addEventListener("click",()=>{fs=Math.min(fs+1,22);apply();});
+document.getElementById("fsMinus").addEventListener("click",()=>{fs=Math.max(fs-1,14);apply();});
+apply();
+</script>
+</body>
+</html>
